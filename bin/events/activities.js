@@ -1,4 +1,4 @@
-const presence = {
+var presence = {
     config: {
         details: 'Servidor Offline 🔴',
         state: 'ip: redeworth.com',
@@ -70,6 +70,9 @@ const detectMinecraftClients = () => {
 };
 
 module.exports.presence = async (nick, configData) => {
+    const { db } = require('../plugins/dataDB');
+
+    configData = db.rich.get("configRichPresence");
     if (nick !== 'Desconhecido' && configData.nickname !== 'Desconhecido') {
         if (configData.nickname) nick = configData.nickname;
     }
@@ -84,9 +87,9 @@ module.exports.presence = async (nick, configData) => {
         }
 
         const data = await response.json();
-        presence.config.startTimestamp = (configData.showTimeActivities === true) ?
+        presence.config.startTimestamp = ((configData.showTimeActivities === true) ?
             new Date(configData.editTimeActivitiesProfile).getTime() :
-            new Date().getTime() + (24 * 60 * 60 * 1000);
+            new Date().getTime() + (24 * 60 * 60 * 1000))
 
         presence.config.state = configData.showClient ?
             `ip: redeworth.com${isMinecraftRunning ? ' | ' + clients.join(', ') : ''}` :
@@ -99,10 +102,7 @@ module.exports.presence = async (nick, configData) => {
         presence.config.partySize = configData.showPlayers ? Math.floor(data.players.online) || 0 : 0;
         presence.config.partyMax = configData.showPlayers ? (data.players.online ? data.players.max : 0) : 0;
 
-        presence.config.smallImageKey = [
-            'vitorxp', 'MihawkRevex', 'Draccount', 'MuriloRevex', 'lkttjota',
-            'ShimizuMimi', 'MoonSpy_', 'Neto33rec'
-        ].includes(nick) ? nick.toLowerCase() : 'usernick';
+        presence.config.smallImageKey = `https://mc-heads.net/avatar/${nick}/128`;
         presence.config.smallImageText = nick || 'Desconhecido';
 
         return presence.config;

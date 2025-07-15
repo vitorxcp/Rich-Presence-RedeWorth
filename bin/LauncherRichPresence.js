@@ -3,7 +3,6 @@ require("./plugins/terminalLogInfo");
 const fs = require('fs');
 const path = require('path');
 const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
-const Store = require("electron-store");
 const { spawn } = require('child_process');
 const peq = require('../package.json');
 const config = require('./configFile');
@@ -151,7 +150,8 @@ const createMainWindow = () => {
 
   mainWindow.loadFile('ui/index.html');
   mainWindow.setTitle("Discord Rich Presence RedeWorth");
-
+  
+  mainWindow.show()
   if (db.get("config/runAppToMin") === true) mainWindow.hide();
 
   setInterval(() => {
@@ -160,6 +160,7 @@ const createMainWindow = () => {
       mainWindow.webContents.send('MemoryUsed', process.memoryUsage());
       mainWindow.webContents.send('config', db.rich.get("configRichPresence"));
       mainWindow.webContents.send('configApp', db.get("config"));
+      mainWindow.webContents.send("infoApp", d3)
     }
   }, 1000);
 
@@ -221,7 +222,7 @@ const startRPCProcess = nick => {
   timeStart = Date.now();
 
   updateTrayMenu("run");
-  console.clear();
+  // console.clear();
   mainWindow.webContents.send('startRPC', {
     timeStart
   });
@@ -230,8 +231,8 @@ const startRPCProcess = nick => {
   if (rpcProcess) console.log('[DEBUG_LOG] - Status do RPC Morto pelo sistema para evitar duplicação.')
 
   rpcProcess?.kill();
-
-  rpcProcess = spawn('node', ['src/RichPresence.js'], {
+  const nodePath = process.execPath;
+  rpcProcess = spawn(nodePath, ['bin/RichPresence.js'], {
     env: {
       ...process.env,
       NICKNAME: nick
@@ -284,6 +285,7 @@ const handleRPCProcessOutput = data => {
 const initializeApp = () => {
   console.log("[DEBUG_LOG] - Inicializando aplicação...");
   createSplashWindow();
+  splashWindow.show()
 };
 
 app.whenReady().then(initializeApp);

@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
 
 function removeColorCodes(text) {
     const colorRegex = /\x1B\[[0-?]*[ -/]*[@-~]/g;
@@ -16,15 +15,6 @@ const baseLogFile = path.join(logsDir, 'system_log.log');
 const timestamp = new Date().toISOString().replace(/:/g, '-').replace('T', '_').split('.')[0];
 const uniqueLogFile = path.join(logsDir, `${timestamp}-system.log`);
 
-const logColors = {
-    LOG: chalk.white,
-    INFO: chalk.blue,
-    WARN: chalk.yellow,
-    ERROR: chalk.red,
-    DEBUG: chalk.magenta,
-    SUCCESS: chalk.green
-};
-
 function writeLog(filePath, message) {
     fs.appendFile(filePath, removeColorCodes(message) + '\n', (err) => {
         if (err) console.error('Erro ao escrever no log:', err);
@@ -33,9 +23,8 @@ function writeLog(filePath, message) {
 
 function logMessage(level = 'LOG', tag = 'GENERAL', ...args) {
     const now = new Date().toISOString();
-    const color = logColors[level] || chalk.white;
-    const formattedTag = chalk.gray(`[${tag.toUpperCase()}]`);
-    const prefix = `${chalk.gray(`[${now}]`)} ${formattedTag} ${color(`[${level}]`)}`;
+    const formattedTag = (`[${tag.toUpperCase()}]`);
+    const prefix = `${(`[${now}]`)} ${formattedTag}`;
     const message = args.map(arg => (typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg))).join(' ');
     const fullMessage = `${prefix} ${message}`;
 

@@ -1,6 +1,5 @@
 const peq = require('../package.json');
 const DiscordRPC = require('discord-rpc');
-const presence = require('./events/activities');
 const CLIENT_ID = '1325483160011804754';
 const RPC = new DiscordRPC.Client({ transport: 'ipc' });
 
@@ -42,7 +41,7 @@ function centralizarTexto(texto, largura) {
 }
 
 async function exibirBanner() {
-  console.clear();
+  // console.clear();
   await verificarAtualizarVersao();
 
   const largura = 70;
@@ -52,21 +51,21 @@ async function exibirBanner() {
   setTimeout(() => {
     const fs = require('fs');
     const path = require('path');
-  
+
     const pastaProjeto = path.join(__dirname, '..');
     const stats = fs.statSync(pastaProjeto);
     const dataModificacao = new Date(stats.mtime);
-  
+
     const formatarData = (data) => {
       const dia = String(data.getDate()).padStart(2, '0');
       const mes = String(data.getMonth() + 1).padStart(2, '0');
       const ano = data.getFullYear();
       return `${dia}/${mes}/${ano}`;
     };
-  
+
     console.log(`\x1b[0;35m${centralizarTexto(`Versão: ${peq.version} - Modificado em: ${formatarData(dataModificacao)}`, largura)}\x1b[0m`);
   }, 160);
-  
+
   setTimeout(() => { console.log(`\x1b[0;37m---------------------------------------------------------------\x1b[0m\n`); }, 180)
 }
 
@@ -74,7 +73,7 @@ async function iniciarRPC() {
   try {
     DiscordRPC.register(CLIENT_ID);
     RPC.login({ clientId: CLIENT_ID })
-      .then(async () => { 
+      .then(async () => {
         discordIsNotLog = false;
       })
       .catch(async err => {
@@ -101,6 +100,7 @@ async function iniciarRPC() {
 }
 
 process.stdin.on('data', (chunk) => {
+  console.log("", chunk);
   try {
     const jsonStrings = chunk.toString().trim().split("\n").filter(Boolean);
 
@@ -118,6 +118,7 @@ process.stdin.on('data', (chunk) => {
 async function atualizarAtividade() {
   const configData = process.env.CONFIG_DATA ? JSON.parse(process.env.CONFIG_DATA) : {};
   if (!RPC) return;
+  const presence = require('./events/activities');
   RPC.setActivity(await presence.presence(nickName, configData));
 }
 

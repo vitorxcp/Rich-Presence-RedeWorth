@@ -2055,7 +2055,7 @@ input {
 }
 
 input:checked+.slider2 {
-    background-color: #13213B
+    background-color: #102f55
 }
 
 input:checked+.slider2:before {

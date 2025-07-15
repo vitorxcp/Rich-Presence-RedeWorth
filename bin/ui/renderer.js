@@ -1,7 +1,6 @@
 const { ipcRenderer } = require('electron');
 const peq = require("../../package.json");
 
-
 let csfg = false;
 let downloadNewVersion;
 let dateOnActivities = 0;
@@ -9,6 +8,7 @@ let dateReloadStatus = 0;
 let dateOnActivitieMinecraft = 0;
 let nickname = "";
 let startRPC;
+let intInfo = false;
 let jqwerftj = document.getElementById("showActivitiesReal").checked;
 let dsaf34r = document.getElementById("editTimeActivitiesProfile").value;
 
@@ -139,6 +139,7 @@ const updateServerInfo = async () => {
     }
 };
 
+
 const checkForUpdates = async () => {
     Array.from(document.getElementsByClassName("wedfr")).forEach(el => el.style.display = "none");
 
@@ -214,6 +215,37 @@ document.getElementById('saveConfig').addEventListener('click', () => {
     csfg = false
     showError("Configurações salvas.");
 });
+
+document.getElementById('saveConfig').addEventListener("submit", () => {
+    var editTimeActivitiesProfile = document.getElementById('editTimeActivitiesProfile').value;
+    var showClient = document.getElementById('showClient').checked;
+    var showPlayers = document.getElementById('showPlayers').checked;
+    var showTimeActivities = document.getElementById('showTimeActivities').checked;
+    var nickInput = document.getElementById("editNick").value;
+    var showActivitiesReal = document.getElementById("showActivitiesReal").checked;
+
+    if (nickInput.length < 3) {
+        showError("Coloque um nickname maior que 3 letras.");
+        document.getElementById("editNick").focus()
+        return;
+    }
+
+    nickname = nickInput;
+
+    ipcRenderer.send(`config`, {
+        showActivitiesReal,
+        editTimeActivitiesProfile,
+        showClient,
+        showPlayers,
+        showTimeActivities,
+        nickname
+    });
+
+    toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "none");
+    csfg = false
+    showError("Configurações salvas.");
+});
+
 document.getElementById('configButton').addEventListener('click', () => {
     showClientConfig()
 
@@ -324,7 +356,7 @@ function showClientConfig() {
     toggleElementsDisplay(document.getElementsByClassName("wedfr-d3f4"), "flex");
 }
 
-function btnConfigAppCategory(element) {    
+function btnConfigAppCategory(element) {
     var value = element.name;
     document.getElementById("vhu3d").value = "false";
     document.getElementById("vhu3df").value = "false";
@@ -369,6 +401,7 @@ ipcRenderer.on('versionAPP', (event, data) => {
 });
 
 ipcRenderer.on('startRPC', (event, data) => {
+    intInfo = true;
     if (jqwerftj === true) {
         document.getElementById("editTimeActivitiesProfile").value = new Date(startRPC).toLocaleString("en-CA", {
             year: 'numeric',
@@ -450,6 +483,26 @@ ipcRenderer.on('config', (event, data) => {
     document.getElementById('headNickname').src = `https://mc-heads.net/avatar/${data.nickname}/16x16`;
 })
 
+ipcRenderer.on("infoApp", (event, data) => {
+    var stats = data;
+
+    if (stats === "run" & intInfo !== true) {
+        const terminalDiv = document.getElementById('terminal');
+
+        const mensagem = `<p style="color: #ffcc00">Você provavelmente reiniciou a página, mas o sistema de atividades já estava online!</p>`;
+        terminalDiv.insertAdjacentHTML('beforeend', mensagem);
+        terminalDiv.scrollTop = terminalDiv.scrollHeight;
+
+        showError("Iniciada com sucesso!");
+
+        document.getElementById('startRPC').disabled = true;
+        document.getElementById('reloadRPC').disabled = false;
+        document.getElementById('stopRPC').disabled = false;
+        
+        intInfo = true;
+    }
+})
+
 ipcRenderer.on('configApp', (event, data) => {
     if (csfg === true) return;
 
@@ -471,7 +524,7 @@ ipcRenderer.on('configApp', (event, data) => {
 setInterval(() => {
     if (dateOnActivities) {
         document.getElementById('dateOnActivities').textContent = formatTimeDifference(dateOnActivities);
-        if (!dateReloadStatus) dateReloadStatus = 15;
+        if (!dateReloadStatus) dateReloadStatus = 25;
     } else {
         document.getElementById('dateOnActivities').textContent = "Ainda não foi iniciado..."
     }
