@@ -1,5 +1,7 @@
 const { ipcRenderer } = require('electron');
-const peq = require("../../package.json");
+const peq = require("../../../package.json");
+
+let user = null
 
 let csfg = false;
 let downloadNewVersion;
@@ -144,7 +146,7 @@ const checkForUpdates = async () => {
     Array.from(document.getElementsByClassName("wedfr")).forEach(el => el.style.display = "none");
 
     try {
-        const response = await fetch('https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest');
+        const response = await fetch('https://api.github.com/repos/vitorxcp/Rich-Presence-RedeWorth/releases/latest');
         if (!response.ok) return;
 
         const data = await response.json();
@@ -163,6 +165,47 @@ const checkForUpdates = async () => {
         }
     } catch (err) {
         console.error("Error checking for updates:", err);
+    }
+};
+
+const reloadUser = async () => {
+    await fetch("http://localhost:7847/api/user").then(res => res.json())
+        .then(userr => userr.id ? (user = userr) : (user = null));
+
+    if (user) {
+        document.getElementById("authDC").innerHTML = `
+                            <div class="e2r">
+                                <div>
+                                    <div class="ce4im" style="background-image: url('https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}');    background-size: contain;"></div>
+                                </div>
+                                <div>
+                                    <span style="font-size: 14px;font-weight: 500;">${user.username}</span><br>
+                                    <span style="color: #9096A0;font-size: 12px;">@${user.global_name}</span>
+                                </div>
+                            </div>
+                            <button class="d23erwed" id="logoutBtn">Sair</button>
+    `
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            ipcRenderer.send('logout-discord');
+        });
+    } else {
+        document.getElementById("authDC").innerHTML = `
+        <div class="e2r">
+                                <div>
+                                    <div class="ce4im"></div>
+                                </div>
+                                <div>
+                                    <span style="font-size: 14px;font-weight: 500;">Usuário Desconectado</span><br>
+                                    <span style="color: #9096A0;font-size: 12px;">@user_name</span>
+                                </div>
+                            </div>
+                            <button class="d23erwed" id="loginBtn">Conectar ao Discord</button>
+        `
+
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            ipcRenderer.send('abrir-login-discord');
+        });
     }
 };
 
@@ -400,6 +443,10 @@ ipcRenderer.on('versionAPP', (event, data) => {
     document.getElementById('versionAPP').textContent = data;
 });
 
+ipcRenderer.on('reloadUser', async () => {
+    await reloadUser();
+})
+
 ipcRenderer.on('startRPC', (event, data) => {
     intInfo = true;
     if (jqwerftj === true) {
@@ -498,7 +545,7 @@ ipcRenderer.on("infoApp", (event, data) => {
         document.getElementById('startRPC').disabled = true;
         document.getElementById('reloadRPC').disabled = false;
         document.getElementById('stopRPC').disabled = false;
-        
+
         intInfo = true;
     }
 })
@@ -545,8 +592,15 @@ setInterval(() => {
 
 setTimeout(updateServerInfo, 1000);
 setInterval(updateServerInfo, 15000);
+setInterval(reloadUser, 30000);
 setTimeout(checkForUpdates, 1900);
 setInterval(checkForUpdates, 30000);
+
+async function start() {
+    await reloadUser();
+}
+
+start();
 
 document.addEventListener('keydown', (event) => {
     if (event.key === "Escape") {

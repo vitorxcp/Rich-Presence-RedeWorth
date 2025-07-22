@@ -1,4 +1,4 @@
-const peq = require('../package.json');
+const peq = require('../../package.json');
 const DiscordRPC = require('discord-rpc');
 const CLIENT_ID = '1325483160011804754';
 const RPC = new DiscordRPC.Client({ transport: 'ipc' });
@@ -10,7 +10,7 @@ console.log(`[DEBUG] - Nick registrado: ${nickName}`);
 
 async function verificarAtualizarVersao() {
   try {
-    const response = await fetch('https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest');
+    const response = await fetch('https://api.github.com/repos/vitorxcp/Rich-Presence-RedeWorth/releases/latest');
     if (!response.ok) throw new Error('Falha ao obter versão mais recente.');
 
     const data = await response.json();

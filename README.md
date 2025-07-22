@@ -14,13 +14,15 @@
 * Mudamos a aparência do aplicativo: ajustes em cores, espaçamentos e outros detalhes visuais.
 * Sistema de vinculação com o Discord foi **implementado com sucesso**!
 * Melhoramos o desempenho do sistema em segundo plano, assim evitando usar muitos processos.
+* Sistema multi-plataformas inplementado.
+* Refizemos uma parte do sistema de atualizações, para melhor velocidade.
 
 # 💻 Compatível com Windows e Linux
 
 ## 🛠️ Como instalar e rodar
 
 - 1️⃣ Extraia os arquivos para uma pasta de sua preferência.
-- 2️⃣ Execute o arquivo `RichPresenceRedeWorth.exe`.
+- 2️⃣ Execute o arquivo `RichPresenceRedeWorth.exe` ou `RichPresenceRedeWorth`.
 - 3️⃣ Aguarde a inicialização (pode levar de 1 a 2 minutos na primeira vez).
 
 ✅ Após isso, o aplicativo estará funcionando corretamente com o Rich Presence ativo!
@@ -30,7 +32,6 @@
 ## 🎉 Agradecimentos Especiais
 
 * ⌨️ `vitorxp` – Developer / Design / Bug Tester
-* 💻 `gabsil_` – Design / Bug Tester
-* 🔍 `ShimizuMimi` – Bug Tester
+* 💻 `gabsil_` – Design
 
 ![image](https://i.imgur.com/OV0g9A4.png)

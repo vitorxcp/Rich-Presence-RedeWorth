@@ -1,14 +1,15 @@
-require("./plugins/terminalLogInfo");
+require("./plugins/terminalLogInfo.js");
 
 const fs = require('fs');
 const path = require('path');
 const { app, BrowserWindow, ipcMain, Menu, Tray } = require('electron');
 const { spawn } = require('child_process');
-const peq = require('../package.json');
-const config = require('./configFile');
-const { db } = require('./plugins/dataDB');
+const peq = require('../../package.json');
+const config = require('./configFile.js');
+const { db } = require('./plugins/dataDB.js');
 const { pipeline } = require('stream');
 const { promisify } = require('util');
+const configFile = require("./configFile.js");
 const streamPipeline = promisify(pipeline);
 
 console.log('[DEBUG_LOG] - Log do terminal sendo registrada com sucesso em', path.dirname(process.cwd()));
@@ -19,6 +20,8 @@ let nickname = db.rich.get("configRichPresence/nickname") ?? "";
 let noAgain = db.get("config/minimizeToTray") === false;
 let tryAgain = false;
 var d3 = ""
+
+const authEvents = require('./server.js');
 
 const formatText = text => text.replace(/\n/g, '<br>');
 const formatTextc = text => text.replace(/\n/g, '');
@@ -150,7 +153,7 @@ const createMainWindow = () => {
 
   mainWindow.loadFile('ui/index.html');
   mainWindow.setTitle("Discord Rich Presence RedeWorth");
-  
+
   mainWindow.show()
   if (db.get("config/runAppToMin") === true) mainWindow.hide();
 
@@ -288,6 +291,49 @@ const initializeApp = () => {
   splashWindow.show()
 };
 
+let authWindow = null;
+
+ipcMain.on('abrir-login-discord', () => {
+  if (authWindow) {
+    authWindow.focus();
+    return;
+  }
+  authWindow = new BrowserWindow({
+    width: 600,
+    icon: path.join(__dirname, "./ui/image/imageicon.png"),
+    height: 500,
+    parent: mainWindow,
+    modal: true,
+    show: true,
+    resizable: false,
+    frame: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: false,
+    },
+  });
+
+  authWindow.loadURL(configFile.authUrl);
+
+   authWindow.on('closed', () => {
+    authWindow = null;
+  });
+});
+
+authEvents.on('authenticated', (token, userData) => {
+  db.update("tokenUser", token)
+  mainWindow.webContents.send('reloadUser', true);
+  if (authWindow) {
+    authWindow.close();
+    authWindow = null;
+  }
+});
+
+ipcMain.on('logout-discord', () => {
+  db.update("tokenUser", null)
+  mainWindow.webContents.send('reloadUser', true);
+});
+
 app.whenReady().then(initializeApp);
 
 ipcMain.on('startRPC', (event, nick) => startRPCProcess(nick));
@@ -306,7 +352,7 @@ ipcMain.on("firstUpdate", (event, data) => {
       db.update("config/reloadStartRichPresence", false);
       startRPCProcess(nickname);
     }
-  }, 1000)
+  }, 2500)
   splashWindow.close();
 })
 
@@ -319,9 +365,12 @@ ipcMain.on("updateVerify", async (event, data2) => {
   const AdmZip = require("adm-zip");
 
   const response = await fetch(
-    "https://api.github.com/repos/XPCreate/Rich-Presence-RedeWorth/releases/latest"
-  );
-  if (!response.ok) return splashWindow.webContents.send("firstUpdate", false);;
+    "https://api.github.com/repos/vitorxcp/Rich-Presence-RedeWorth/releases/latest"
+  ).catch(e => {
+    return splashWindow.webContents.send("firstUpdate", false);
+  });
+
+  if (!response.ok) return splashWindow.webContents.send("firstUpdate", false);
 
   const data = await response.json();
   if (!data.tag_name) return splashWindow.webContents.send("firstUpdate", false);;
