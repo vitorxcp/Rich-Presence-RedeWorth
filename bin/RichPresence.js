@@ -1,4 +1,4 @@
-const peq = require('../../package.json');
+const peq = require('../package.json');
 const DiscordRPC = require('discord-rpc');
 const CLIENT_ID = '1325483160011804754';
 const RPC = new DiscordRPC.Client({ transport: 'ipc' });

@@ -1,13 +1,15 @@
 {
   "name": "rich-presence-redeworth",
   "productName": "Discord Rich Presence Rede Worth",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "Status personalizado do Discord, para fins de divulgação do servidor redeworth.com.",
   "main": "bin/LauncherRichPresence.js",
   "bin": "bin/LauncherRichPresence.js",
   "scripts": {
     "start": "electron bin/LauncherRichPresence.js",
-    "build": "pkg . --target node18-win-x64 --output dist/rich-presence-redeworth.exe"
+    "buildw": "g++ -std=c++11 main.cpp resource.o -o RichPresenceRedeWorth.exe -static",
+    "buildl": "g++ -std=c++11 main.cpp resource.o -o RichPresenceRedeWorth",
+    "buildIcon": "windres resource.rc -O coff -o resource.o"
   },
   "type": "commonjs",
   "pkg": {
@@ -55,7 +57,7 @@
   },
   "devDependencies": {
     "@types/discord-rpc": "^4.0.8",
-    "electron": "^36.1.0",
+    "electron": "^36.2.1",
     "nexe": "^5.0.0-beta.4",
     "pkg": "^5.8.1"
   }
