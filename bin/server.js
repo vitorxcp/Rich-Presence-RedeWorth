@@ -1,3 +1,4 @@
+const { dialog } = require('electron');
 const http = require('http');
 const { URL } = require('url');
 const fetch = require('node-fetch');
@@ -10,6 +11,7 @@ module.exports = authEvents;
 const CLIENT_ID = '1313170068997275648';
 const CLIENT_SECRET = 'XxdAE9-2yo5yQOJMLxsFHgfJfzTSwmW-';
 const REDIRECT_URI = 'http://localhost:7847/callback';
+let ports = [7847, 2345, 2142, 6785, 25345, 6754, 1244, 7869, 2341, 7856]
 const PORT = 7847;
 
 async function exchangeCodeForToken(code) {
@@ -40,7 +42,7 @@ async function getUserData(access_token) {
     return await res.json();
 }
 
-http.createServer(async (req, res) => {
+const server = http.createServer(async (req, res) => {
     if (req.url.startsWith('/callback')) {
         const url = new URL(req.url, `http://localhost:${PORT}`);
         const code = url.searchParams.get('code');
@@ -53,9 +55,6 @@ http.createServer(async (req, res) => {
         try {
             const tokenData = await exchangeCodeForToken(code);
             const userData = await getUserData(tokenData.access_token);
-
-            // console.log('Token:', tokenData);
-            // console.log('Usuário:', userData);
 
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(`<h2>Bem-vindo, ${userData.username}!</h2><p>Você pode fechar esta janela.</p>`);
@@ -74,7 +73,7 @@ http.createServer(async (req, res) => {
 
         if (!code) {
             res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({message: "Código de autorização não encontrado."}));
+            res.end(JSON.stringify({ message: "Código de autorização não encontrado." }));
         }
 
         try {
@@ -91,6 +90,16 @@ http.createServer(async (req, res) => {
         res.writeHead(404);
         res.end('Not Found');
     }
-}).listen(PORT, () => {
+})
+server.listen(PORT, () => {
     console.log(`Servidor de callback rodando em http://localhost:${PORT}/callback`);
+})
+
+server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`A porta ${PORT} já está em uso.`);
+        dialog.showErrorBox('Erro ao iniciar o servidor', `A porta ${PORT} já está em uso. Feche outras instâncias do programa.`);
+    } else {
+        console.error('Erro desconhecido ao iniciar o servidor:', err);
+    }
 });

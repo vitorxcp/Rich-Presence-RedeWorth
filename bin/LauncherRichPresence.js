@@ -1,3 +1,22 @@
+process.on('uncaughtException', (err) => {
+  console.error('[ERROR] Uncaught Exception:', err);
+  handleFatalError(err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[ERROR] Unhandled Rejection:', reason);
+  handleFatalError(reason);
+});
+
+function handleFatalError(error) {
+  fs.appendFileSync('crash.log', `[${new Date().toISOString()}] ${error.stack || error}\n`);
+
+  setTimeout(() => {
+    app.relaunch();
+    app.exit(0);
+  }, 2000);
+}
+
 require("./plugins/terminalLogInfo.js");
 
 const fs = require('fs');
@@ -16,7 +35,13 @@ console.log('[DEBUG_LOG] - Log do terminal sendo registrada com sucesso em', pat
 console.log("[DEBUG_LOG] - Iniciando sistemas...");
 
 let mainWindow, rpcProcess, splashWindow, tray, timeStart;
-let nickname = db.rich.get("configRichPresence/nickname") ?? "";
+let nickname = "";
+try {
+  nickname = db.rich.get("configRichPresence/nickname") || "";
+} catch (err) {
+  nickname = "";
+  console.warn("[WARN] Não foi possível carregar nickname. Usando padrão.");
+}
 let noAgain = db.get("config/minimizeToTray") === false;
 let tryAgain = false;
 var d3 = ""
@@ -194,6 +219,16 @@ const createMainWindow = () => {
       console.log('[DEBUG_LOG] - Saindo da aplicação.');
     }
   });
+
+  mainWindow.on('unresponsive', () => {
+    console.warn('[WARN] Janela travada. Reiniciando app...');
+    restartApp();
+  });
+
+  mainWindow.on('crashed', () => {
+    console.error('[ERROR] Janela principal crashou.');
+    restartApp();
+  });
 };
 
 const createSplashWindow = () => {
@@ -202,7 +237,7 @@ const createSplashWindow = () => {
     height: 450,
     frame: false,
     icon: path.join(__dirname, "./ui/image/imageicon.png"),
-    alwaysOnTop: true,
+    alwaysOnTop: false,
     resizable: false,
     webPreferences: {
       nodeIntegration: true,
@@ -246,6 +281,15 @@ const startRPCProcess = nick => {
   rpcProcess.stdout.on('data', handleRPCProcessOutput);
   rpcProcess.stderr.on('data', data => console.error(formatTextc(`Erro: ${data}`)));
   rpcProcess.on('close', () => console.log('[DEBUG] - RPC encerrado.'));
+  rpcProcess.on('exit', (code, signal) => {
+    console.warn(`[WATCHDOG] RPC process exited. Code: ${code}, Signal: ${signal}`);
+    setTimeout(() => {
+      if (!rpcProcess) {
+        console.log('[WATCHDOG] Reiniciando RPC automaticamente...');
+        startRPCProcess(nickname);
+      }
+    }, 3000);
+  });
 };
 
 const restartRPCProcess = () => {
@@ -315,7 +359,7 @@ ipcMain.on('abrir-login-discord', () => {
 
   authWindow.loadURL(configFile.authUrl);
 
-   authWindow.on('closed', () => {
+  authWindow.on('closed', () => {
     authWindow = null;
   });
 });
