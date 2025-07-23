@@ -414,7 +414,7 @@ ipcMain.on("updateVerify", async (event, data2) => {
     return splashWindow.webContents.send("firstUpdate", false);
   });
 
-  if (!response.ok) return splashWindow.webContents.send("firstUpdate", false);
+  if (!response || !response.ok) return splashWindow.webContents.send("firstUpdate", false);
 
   const data = await response.json();
   if (!data.tag_name) return splashWindow.webContents.send("firstUpdate", false);;

@@ -1,7 +1,7 @@
 {
   "name": "rich-presence-redeworth",
   "productName": "Discord Rich Presence Rede Worth",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Status personalizado do Discord, para fins de divulgação do servidor redeworth.com.",
   "main": "bin/LauncherRichPresence.js",
   "bin": "bin/LauncherRichPresence.js",

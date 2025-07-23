@@ -170,7 +170,10 @@ const checkForUpdates = async () => {
 
 const reloadUser = async () => {
     await fetch("http://localhost:7847/api/user").then(res => res.json())
-        .then(userr => userr.id ? (user = userr) : (user = null));
+        .then(userr => userr.id ? (user = userr) : (user = null)).catch(e => {
+            user = null;
+            showError("Sem conexão com o servidor.")
+        });
 
     if (user) {
         document.getElementById("authDC").innerHTML = `
