@@ -1,5 +1,5 @@
 module.exports = {
-    environment: "DE",
+    environment: "Production",
     clientId: '1313170068997275648',
     redirectUri: 'http://localhost:7847/callback',
     scope: 'identify email',
