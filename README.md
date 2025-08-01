@@ -1,6 +1,6 @@
 ![wakatime](https://wakatime.com/badge/github/XPCreate/Rich-Presence-RedeWorth.svg)
 
-# 🎮 Atividade RedeWorth `v2.1.1`
+# 🎮 Atividade RedeWorth `v2.1.2`
 
 ## 🚀 Exclusivo para divulgação da RedeWorth
 
@@ -8,8 +8,8 @@
 
 ### 🔹 Aplicativo
 
-* Corrigido erro na inicialização do aplicado caso você não tenha internet.
-* Adicionado sistema de alertas.
+* Correção da página inicial do aplicativo.
+* Adicionado sistema de cache para melhor execução.
 
 # 💻 Compatível com Windows e Linux
 
