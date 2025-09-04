@@ -1,3 +1,4 @@
+
 process.on('uncaughtException', (err) => {
   console.error('[ERROR] Uncaught Exception:', err);
   handleFatalError(err);
@@ -30,6 +31,9 @@ const { pipeline } = require('stream');
 const { promisify } = require('util');
 const configFile = require("./configFile.js");
 const streamPipeline = promisify(pipeline);
+const { fork } = require("child_process");
+
+app.commandLine.appendSwitch('disable-renderer-backgrounding');
 
 console.log('[DEBUG_LOG] - Log do terminal sendo registrada com sucesso em', path.dirname(process.cwd()));
 console.log("[DEBUG_LOG] - Iniciando sistemas...");
@@ -336,6 +340,7 @@ const initializeApp = () => {
 };
 
 let authWindow = null;
+let livePixWindow = null;
 
 ipcMain.on('abrir-login-discord', () => {
   if (authWindow) {
@@ -361,6 +366,33 @@ ipcMain.on('abrir-login-discord', () => {
 
   authWindow.on('closed', () => {
     authWindow = null;
+  });
+});
+
+ipcMain.on('abrir-livepix', () => {
+  if (livePixWindow) {
+    livePixWindow.focus();
+    return;
+  }
+  livePixWindow = new BrowserWindow({
+    width: 550,
+    icon: "https://cdn.discordapp.com/avatars/518862457876250625/a_dd92d27383a7c85ef111c62c1989f168.png",
+    height: 850,
+    modal: false,
+    show: true,
+    resizable: true,
+    frame: true,
+    autoHideMenuBar: true,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: false,
+    },
+  });
+
+  livePixWindow.loadURL("https://livepix.gg/vitorxp1958");
+
+  livePixWindow.on('closed', () => {
+    livePixWindow = null;
   });
 });
 
@@ -406,8 +438,6 @@ ipcMain.on("updateVersionApp", async (event, data) => {
 })
 
 ipcMain.on("updateVerify", async (event, data2) => {
-  const AdmZip = require("adm-zip");
-
   const response = await fetch(
     "https://api.github.com/repos/vitorxcp/Rich-Presence-RedeWorth/releases/latest"
   ).catch(e => {
@@ -417,12 +447,18 @@ ipcMain.on("updateVerify", async (event, data2) => {
   if (!response || !response.ok) return splashWindow.webContents.send("firstUpdate", false);
 
   const data = await response.json();
-  if (!data.tag_name) return splashWindow.webContents.send("firstUpdate", false);;
+  if (!data.tag_name) return splashWindow.webContents.send("firstUpdate", false);
 
   const versaoMaisRecente = data.tag_name;
   const versaoLocal = `v${peq.version}`;
 
-  console.log(versaoMaisRecente, versaoLocal, Number(versaoMaisRecente.replace(/[^\d]/g, "")), Number(versaoLocal.replace(/[^\d]/g, "")), versaoLocal !== versaoMaisRecente)
+  console.log(
+    versaoMaisRecente,
+    versaoLocal,
+    Number(versaoMaisRecente.replace(/[^\d]/g, "")),
+    Number(versaoLocal.replace(/[^\d]/g, "")),
+    versaoLocal !== versaoMaisRecente
+  );
 
   let zipUrl = null;
   if (versaoLocal !== versaoMaisRecente) {
@@ -438,7 +474,7 @@ ipcMain.on("updateVerify", async (event, data2) => {
 
   splashWindow.webContents.send("yepUpdate", true);
 
-  const outputPath = path.join(__dirname, "test.zip");
+  const outputPath = path.join(__dirname, "update.zip");
   const extractPath = path.join(__dirname, "..");
 
   const writer = fs.createWriteStream(outputPath);
@@ -453,55 +489,43 @@ ipcMain.on("updateVerify", async (event, data2) => {
         );
       }
 
-      const totalSize = response.headers.get('content-length');
+      const totalSize = response.headers.get("content-length");
       if (!totalSize) {
         console.warn("[WARN] Não foi possível obter o tamanho do arquivo.");
       }
       const totalBytes = totalSize ? parseInt(totalSize, 10) : null;
       let downloadedSize = 0;
 
-      const { Transform } = require('stream');
+      const { Transform } = require("stream");
 
       const progressStream = new Transform({
         transform(chunk, encoding, callback) {
           downloadedSize += chunk.length;
           if (totalBytes) {
             const percent = Math.round((downloadedSize / totalBytes) * 100);
-            splashWindow.webContents.send('outputPercentUpdate', percent);
+            splashWindow.webContents.send("outputPercentUpdate", percent);
           }
           this.push(chunk);
           callback();
-        }
+        },
       });
 
       await streamPipeline(response.body, progressStream, writer);
 
       console.log("[LOG] Download finalizado corretamente.");
-
-      splashWindow.webContents.send('updateDonwloadFirst', true);
+      splashWindow.webContents.send("updateDonwloadFirst", true);
 
       console.log("[LOG] Extraindo arquivos...");
 
-      const zip = new AdmZip(outputPath);
-      const zipEntries = zip.getEntries();
-      const totalFiles = zipEntries.length;
-      let extractedFiles = 0;
+      // Usa processo separado para não travar
+      await extractWithWorker(outputPath, extractPath);
 
-      zipEntries.forEach((entry) => {
-        zip.extractEntryTo(entry, extractPath, true, true);
-        extractedFiles++;
-
-        const percent = Math.round((extractedFiles / totalFiles) * 100);
-        splashWindow.webContents.send('outputPercentExtractedFiles', percent);
-      });
-
-      console.log("[LOG] Extração concluída.");
-      splashWindow.webContents.send('outputExtractedFiles', true);
+      splashWindow.webContents.send("outputExtractedFiles", true);
       console.log("Arquivos extraídos para:", extractPath);
 
       fs.unlinkSync(outputPath);
       console.log("Arquivo ZIP removido.");
-      fs.writeFileSync(path.join(__dirname, 'update.flag'), 'true');
+      fs.writeFileSync(path.join(__dirname, "update.flag"), "true");
       setTimeout(restartApp, 100);
 
       return splashWindow.webContents.send("firstUpdate", true);
@@ -510,9 +534,29 @@ ipcMain.on("updateVerify", async (event, data2) => {
     }
   }
 
+  function extractWithWorker(zipPath, extractPath) {
+    return new Promise((resolve, reject) => {
+      const worker = fork(path.join(__dirname, "extractWorker.js"));
+
+      worker.send({ zipPath, extractPath });
+
+      worker.on("message", (msg) => {
+        if (msg.type === "progress") {
+          splashWindow.webContents.send("outputPercentExtractedFiles", msg.percent);
+        }
+        if (msg.type === "done") {
+          resolve();
+          worker.kill();
+        }
+      });
+
+      worker.on("error", reject);
+    });
+  }
+
   setTimeout(async () => {
-    await downloadAndExtract()
-  }, 500)
+    await downloadAndExtract();
+  }, 500);
 });
 
 ipcMain.on('configApp', (event, data) => {

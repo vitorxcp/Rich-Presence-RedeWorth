@@ -1504,10 +1504,11 @@ div.ed32 {
     margin-bottom: 10px;
     border-radius: 4px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow-y: auto;
+
+    /* controle para as animações */
+    position: relative;       /* necessário para os filhos absolute */
+    min-height: 200px;        /* altura mínima pra não colapsar quando troca */
+    overflow: hidden;         /* evita bug visual durante a transição */
 }
 
 div.ed32 h1 {
@@ -1841,6 +1842,27 @@ div.sf34 div.t4gre .ef4fd3 {
 
 div.dew4 {
     margin-top: 25px
+}
+
+#abv1, #abv2 {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.4s ease;
+  max-height: 0;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  pointer-events: none;
+}
+
+/* quando ativo fica estável */
+#abv1.active, #abv2.active {
+  opacity: 1;
+  transform: translateX(0);
+  max-height: 2000px; /* valor alto o suficiente */
+  overflow: visible;
+  position: relative;
+  pointer-events: auto;
 }
 
 div.fd4tr {

@@ -4,7 +4,6 @@ const peq = require("../../package.json");
 let user = null
 
 let csfg = false;
-let downloadNewVersion;
 let dateOnActivities = 0;
 let dateReloadStatus = 0;
 let dateOnActivitieMinecraft = 0;
@@ -212,6 +211,10 @@ const reloadUser = async () => {
     }
 };
 
+document.getElementById('openPix').addEventListener('click', () => {
+    ipcRenderer.send('abrir-livepix');
+});
+
 document.getElementById("showTimeActivities").addEventListener("click", function () {
     var showTimeActivities = document.getElementById('showTimeActivities').checked;
 
@@ -404,16 +407,23 @@ function showClientConfig() {
 
 function btnConfigAppCategory(element) {
     var value = element.name;
+
     document.getElementById("vhu3d").value = "false";
     document.getElementById("vhu3df").value = "false";
-    element.value = "true"
+    element.value = "true";
 
+    let abv1 = document.getElementById("abv1");
+    let abv2 = document.getElementById("abv2");
+
+    // Remove active das duas
+    abv1.classList.remove("active");
+    abv2.classList.remove("active");
+
+    // Aplica na correta
     if (value === "app") {
-        document.getElementById("abv2").style.display = "none";
-        document.getElementById("abv1").style.display = "block";
+        abv1.classList.add("active");
     } else {
-        document.getElementById("abv1").style.display = "none";
-        document.getElementById("abv2").style.display = "block";
+        abv2.classList.add("active");
     }
 }
 

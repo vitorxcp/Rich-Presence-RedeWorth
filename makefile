@@ -1,17 +1,13 @@
-# Detecta o sistema operacional
-OS := $(shell uname -s)
+# Makefile para compilar RichPresenceRedeWorth em Linux
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall
+TARGET = RichPresenceRedeWorth
+SRC = main.cpp
 
-# Define o nome do executável conforme o SO
-ifeq ($(OS),Linux)
-    EXE = RichPresenceRedeWorth
-else
-    EXE = RichPresenceRedeWorth.exe
-endif
+all: $(TARGET)
 
-# Regra padrão para compilar
-all:
-	g++ main.cpp resource.o -o $(EXE)
+$(TARGET): $(SRC)
+	$(CXX) $(CXXFLAGS) resource.o -o $(TARGET) $(SRC)
 
-# Limpeza dos arquivos compilados
 clean:
-	rm -f $(EXE)
+	rm -f $(TARGET)
