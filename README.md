@@ -13,7 +13,7 @@
 * Adicionado widget de donate.
 * Arrumando/Adicionado animações diversas.
 * Atualização de icones.
-* Arrumando problema do congelamento do sistema de atualizações.
+* Arrumado problema do congelamento do sistema de atualizações.
 
 # 💻 Compatível com Windows e Linux
 
