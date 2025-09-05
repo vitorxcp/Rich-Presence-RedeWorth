@@ -8,9 +8,18 @@
 
 ### 🔹 Aplicativo
 
+<<<<<<< HEAD
 * Aplicados algumas correções no sistema de login com o Discord.
 * Animações de carregamentos arrumados.
 * Vinculação com a Wikipedia Worth.
+=======
+* Correção da página inicial do aplicativo.
+* Implementação de novos sistemas de verificação.
+* Adicionado widget de donate.
+* Arrumando/Adicionado animações diversas.
+* Atualização de icones.
+* Arrumado problema do congelamento do sistema de atualizações.
+>>>>>>> a6b304cbbb0b99bdf030f83614ec37f8d451d525
 
 # 💻 Compatível com Windows e Linux
 
@@ -29,4 +38,8 @@
 * ⌨️ `vitorxp` – Developer / Design / Bug Tester
 * 💻 `gabsil_` – Design / Bug Tester
 
+<<<<<<< HEAD
 ![image](https://i.imgur.com/bCXLL3V.png)
+=======
+![image](https://i.imgur.com/OV0g9A4.png)
+>>>>>>> a6b304cbbb0b99bdf030f83614ec37f8d451d525
