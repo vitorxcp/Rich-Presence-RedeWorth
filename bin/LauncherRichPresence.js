@@ -235,6 +235,38 @@ const createMainWindow = () => {
   });
 };
 
+authEvents.on('openAutorizationLoginWiki', ({ title, message }) => {
+  const errorWindow = new BrowserWindow({
+    width: 400,
+    height: 500,
+    modal: true,
+    icon: path.join(__dirname, "./ui/image/imageicon.png"),
+    parent: mainWindow,
+    resizable: false,
+    frame: false,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  });
+
+  errorWindow.loadFile('ui/login.html');
+
+  ipcMain.on('auth-permit', (event, foi) => {
+    if (foi === false) {
+      authEvents.emit('wikiLoginError', {
+        title: 'Erro de Autenticação',
+        message: 'Acesso cancelado pelo usuário.'
+      });
+    } else if(foi === true) {
+      authEvents.emit('wikiLoginDone', {
+        title: 'Autenticando...',
+        message: 'Aguarde enquanto autenticamos sua conta...'
+      });
+    }
+  })
+});
+
 const createSplashWindow = () => {
   splashWindow = new BrowserWindow({
     width: 350,
@@ -264,7 +296,6 @@ const startRPCProcess = nick => {
   timeStart = Date.now();
 
   updateTrayMenu("run");
-  // console.clear();
   mainWindow.webContents.send('startRPC', {
     timeStart
   });

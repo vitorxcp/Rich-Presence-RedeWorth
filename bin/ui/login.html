@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autorização de Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'League Spartan', sans-serif;
+            color: #fafafa;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+        }
+
+        .auth-container {
+            background-color: #1b0d0d;
+            border-radius: 2rem;
+            padding: 2rem 3rem;
+            width: 400px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 0 20px #00000087;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .auth-logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem auto;
+            background-image: url(./image/imageicon.png);
+            background-size: cover;
+            background-repeat: no-repeat;
+            border-radius: 12px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            font-size: 14px;
+            color: #ffffffb3;
+            margin-bottom: 2rem;
+        }
+
+        .auth-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .allow {
+            background-color: #00a2ff;
+            color: #fff;
+        }
+
+        .allow:hover {
+            background-color: #0080cc;
+        }
+
+        .deny {
+            background-color: #bd4f4f;
+            color: #fff;
+        }
+
+        .deny:hover {
+            background-color: #8a3a3a;
+        }
+
+        .loading {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .loader {
+            width: 12px;
+            height: 12px;
+            border: 3px solid #00a2ff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="auth-logo"></div>
+        <h2>Permitir acesso?</h2>
+        <p>O aplicativo deseja acessar seus dados para autenticação e Rich Presence.</p>
+        <div class="auth-buttons">
+            <button class="allow" id="btnAllow">Permitir</button>
+            <button class="deny" id="btnDeny">Negar</button>
+        </div>
+        <div class="loading" id="loading">
+            <div class="loader"></div>
+            <p>Processando autenticação...</p>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        const btnAllow = document.getElementById('btnAllow');
+        const btnDeny = document.getElementById('btnDeny');
+        const loading = document.getElementById('loading');
+
+        btnAllow.addEventListener('click', () => {
+            ipcRenderer.send('auth-permit', true);
+            window.close();
+        });
+
+        btnDeny.addEventListener('click', () => {
+            ipcRenderer.send('auth-permit', false);
+            window.close();
+        });
+
+        ipcRenderer.on('auth-result', (event, allowed) => {
+            if (!allowed) {
+                document.querySelector('p').innerText = 'Autenticação negada pelo usuário.';
+                loading.style.display = 'none';
+                btnAllow.disabled = false;
+                btnDeny.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

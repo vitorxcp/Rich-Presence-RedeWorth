@@ -72,21 +72,87 @@ const server = http.createServer(async (req, res) => {
         const code = db.get("tokenUser");
 
         if (!code) {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: "Código de autorização não encontrado." }));
+            res.writeHead(400, {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            });
+            return res.end(JSON.stringify({ message: "Código de autorização não encontrado." }));
+        }
+
+        if (req.method === 'OPTIONS') {
+            res.writeHead(204, {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            });
+            return res.end();
         }
 
         try {
             const userData = await getUserData(code);
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            });
             res.end(JSON.stringify(userData));
         } catch (err) {
             if (!res.headersSent) {
-                res.writeHead(500);
+                res.writeHead(500, {
+                    'Access-Control-Allow-Origin': '*'
+                });
                 res.end('Erro interno do servidor.');
             }
         }
-    } else {
+    } else if (req.url.startsWith('/api/websocket/login/wikipedia')) {
+        authEvents.emit('openAutorizationLoginWiki', "sim?");
+
+        const onDone = async (data) => {
+            if (!res.headersSent) {
+                const code = db.get("tokenUser");
+
+                if (!code) {
+                    res.writeHead(400, {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                        'Access-Control-Allow-Headers': 'Content-Type'
+                    });
+                    return res.end(JSON.stringify({ message: "Código de autorização não encontrado." }));
+                }
+
+                res.writeHead(200, {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                });
+
+                const userData = await getUserData(code);
+                res.end(JSON.stringify({ status: 'success', data, userData }));
+            }
+            cleanup();
+        };
+
+        const onError = (error) => {
+            if (!res.headersSent) {
+                res.writeHead(500, {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                });
+                res.end(JSON.stringify({ status: 'error', error }));
+            }
+            cleanup();
+        };
+
+        const cleanup = () => {
+            authEvents.removeListener('wikiLoginDone', onDone);
+            authEvents.removeListener('wikiLoginError', onError);
+        };
+
+        authEvents.once('wikiLoginDone', onDone);
+        authEvents.once('wikiLoginError', onError);
+    }
+    else {
         res.writeHead(404);
         res.end('Not Found');
     }
