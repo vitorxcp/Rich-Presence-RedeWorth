@@ -52,7 +52,7 @@ async function exibirBanner() {
     const fs = require('fs');
     const path = require('path');
 
-    const pastaProjeto = path.join(__dirname, '..');
+    const pastaProjeto = path.join(__dirname, '..', "..");
     const stats = fs.statSync(pastaProjeto);
     const dataModificacao = new Date(stats.mtime);
 
