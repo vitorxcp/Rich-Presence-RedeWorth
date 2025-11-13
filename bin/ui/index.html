@@ -1,14 +1,14 @@
+<!-- <div class="rounded-full bg-[#003087a1] flex justify-center items-center text-center p-1" title-app="Ajuste o comportamento da janela do aplicativo. Altere o tamanho de inicialização, defina como ela deve interagir com a Rich Presence e explore outras opções de exibição."><i class="fa-regular fa-circle-info text-[#b1b1b1fa]"></i></div> -->
 <!DOCTYPE html>
 <html lang="pt">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="initial-scale=1.0">
     <meta name="theme-color" content="#7289DA">
     <meta name="description" content="Configurações do Rich Presence para Discord">
-    <meta name="og:title" content="Discord Rich Presence RedeWorth">
+    <meta name="og:title" content="Rich Presence RedeWorth">
     <meta name="og:description" content="Configure sua Rich Presence para Discord">
     <link rel="icon" href="./image/749a8e803f7abea1f44bce4832b18d75.png" sizes="32x32">
     <link rel="icon" href="./image/749a8e803f7abea1f44bce4832b18d75.png" type="image/svg+xml">
@@ -17,372 +17,522 @@
     <meta property="og:image" content="./image/749a8e803f7abea1f44bce4832b18d75.png">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.7.2/css/all.css">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBFYYS41ZL"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="renderer.js"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'G-NBFYYS41ZL');
+
+        tailwind.config = {
+            important: true
+        };
     </script>
-    <title>Discord Rich Presence RedeWorth</title>
+    <title>Rich Presence RedeWorth</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body style="background-color: #040A15;">
     <div>
         <div class="wedfr">
-            <span class="loader"></span>
+            <span class="loader" style="z-index: 999;"></span>
         </div>
-        <div class="wedfr-d3" style="display: none;">
-            <div class="fd4tr">
-                <div>
-                    <h1>Informe seu nickname no Minecraft a baixo:</h1>
-                </div>
-                <div>
-                    <input class="d34d4" type="text" id="nick-input" placeholder="Coloque aqui seu nick." required>
-                    <button class="f43" id="startRPC2" type="submit">Iniciar Atividade</button>
+        <nav class="navbar">
+            <div style="display: flex; align-items: center;">
+                <img src="./image/imageicon.png" style="width: 25px;height: 25px;margin-left: 10px;" alt="logo">
+                <h1 class="title">Rich Presence RedeWorth</h1>
+            </div>
+            <div class="v4tc">
+                <span title-app="Baixar nova versão." class="f43fd" id="f43fd" style="display: none;margin-top: 6px;"><i
+                        class="fa-solid fa-arrow-down-to-line fa-shake" style="color: #49bb52"></i></span>
+                <div class="window-controls">
+                    <button id="minimize-btn" title-app="Minimizar Janela"><i class="fa-solid fa-minus"></i></button>
+                    <button id="maximize-btn" title-app="Maximizar Janela"><i class="fa-solid fa-expand"></i></button>
+                    <button id="close-btn" title-app="Fechar Janela"><i class="fa-solid fa-xmark"></i></button>
                 </div>
             </div>
-        </div>
-        <div class="wedfr-d3f4" id="config" style="display: none;">
-            <form onsubmit="return false;">
-                <div class="fd4tr" style="gap: 3px;">
-                    <div class="sd34">
-                        <h1 style="margin-bottom: 10px;">Configurações:</h1>
-                        <button
-                            style="border:0px; background-color: transparent;font-size: 16px;font-weight: 900; cursor: pointer;margin-bottom: 5px;"
-                            id="closeConfig"><i class="fa-solid fa-xmark-large" style="color: red;"></i></button>
-                    </div>
-                    <div class="werf4">
-                        <div>
-                            <h1>Mostrar qual client está aberto</h1>
-                        </div>
-                        <div>
-                            <label class="switch mt-[8px]">
-                                <input type="checkbox" id="showClient" checked>
-                                <div class="slider round"></div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="werf4">
-                        <div>
-                            <h1>Mostrar tempo da atividade</h1>
-                        </div>
-                        <div>
-                            <label class="switch mt-[8px]">
-                                <input type="checkbox" id="showTimeActivities" checked>
-                                <div class="slider round"></div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="werf4">
-                        <div>
-                            <h1>Mostrar jogadores na Worth</h1>
-                        </div>
-                        <div>
-                            <label class="switch mt-[8px]">
-                                <input type="checkbox" id="showPlayers" checked>
-                                <div class="slider round"></div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="werf4">
-                        <div>
-                            <h1>Alterar tempo verdadeiro da atividade</h1>
-                        </div>
-                        <div>
-                            <label class="switch mt-[8px]">
-                                <input type="checkbox" id="showActivitiesReal" checked>
-                                <div class="slider round"></div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="werf4">
-                        <div>
-                            <h1>Alterar tempo da atividade</h1>
-                        </div>
-                        <div>
-                            <input class="fer3" type="datetime-local" id="editTimeActivitiesProfile">
-                        </div>
-                    </div>
-                    <div class="werf4">
-                        <div>
-                            <h1>Seu nickname do minecraft</h1>
-                        </div>
-                        <div style="display: flex; align-items: center;">
-                            <input class="fer3" type="text" id="editNick"><img id="headNickname"
-                                src="https://mc-heads.net/avatar/usrergf/16x16" alt="Head">
-                        </div>
-                    </div>
-                    <button class="fedg" id="saveConfig" onsubmit="buttonSendConfigAlt();" type="submit">
-                        <i class="fas fa-save"></i> Salvar Configurações
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="wedfr-d32" id="configApp" style="display: none;">
-            <div class="df34r">
-                <div class="wed3">
-                    <div class="fereftr34">
-                        <h1 class="tithd2">Configurações do Painel</h1>
-                        <button id="vhu3d" onclick="btnConfigAppCategory(this)" name="app" value="true">Configurações do
-                            Aplicativo</button>
-                        <button id="vhu3df" onclick="btnConfigAppCategory(this)" name="rich" value="false">Configurações
-                            do Rich Presence</button>
-                    </div>
-                    <div>
-                        <div class="discordAccount" id="authDC">
-                            <div class="e2r">
-                                <div>
-                                    <div class="ce4im"></div>
-                                </div>
-                                <div>
-                                    <span style="font-size: 14px;font-weight: 500;">Usuário Desconectado</span><br>
-                                    <span style="color: #9096A0;font-size: 12px;">@user_name</span>
-                                </div>
-                            </div>
-                            <button class="d23erwed" id="loginBtn">Conectar ao Discord</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="ed32" id="ed12f">
-                    <div id="abv1"  class="active">
-                        <h1 style="margin-bottom: 10px;">Configurações do Aplicativo:</h1>
-                        <div class="ce4vtr-f34">
-                            <div style="display: flex;flex-direction:column;gap:6px;">
-                                <h1>Minimizar para a bandeija</h1>
-                                <span>Clicar no X fará o Aplicativo ficar escondidinho e confortável na sua barra de
-                                    tarefas quando você fechar o app.</span>
-                            </div>
-                            <div>
-                                <label class="switch2 mt-[8px]">
-                                    <input type="checkbox" id="minimizeToTray" checked>
-                                    <div class="slider2 round2"></div>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="ce4vtr-f34">
-                            <div style="display: flex;flex-direction:column;gap:6px;">
-                                <h1>Iniciar aplicativo minimizado na bandeija</h1>
-                                <span>Ao iniciar o aplicativo, ele não aparecerá em sua tela, mas sim minimizado no modo
-                                    bandeija do windows.</span>
-                            </div>
-                            <div>
-                                <label class="switch2 mt-[8px]">
-                                    <input type="checkbox" id="runAppToMin">
-                                    <div class="slider2 round2"></div>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="ce4vtr-f34">
-                            <div style="display: flex;flex-direction:column;gap:6px;">
-                                <h1>Fechar aplicativo junto com o jogo</h1>
-                                <span>Ao fechar o jogo, o aplicativo irá fechar junto ao jogo, sendo mais prático de
-                                    encerrar a atividade, quando não em uso.</span>
-                            </div>
-                            <div>
-                                <label class="switch2 mt-[8px]">
-                                    <input type="checkbox" id="closeAppGameInt">
-                                    <div class="slider2 round2"></div>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="ce4vtr-f34" style="flex-direction: column;align-items:normal;gap:10px;">
-                            <div style="display: flex;flex-direction:column;gap:6px;">
-                                <h1>Tamanho da janela</h1>
-                                <span>Alterar tamanho da janela quando o aplicativo iniciar. <span
-                                        style="color: #989898;">(padrão 950px por 600px)</span></span>
-                            </div>
-                            <div style="display: flex; gap:10px;align-items: center;">
-                                <div
-                                    style="background-color: #121d2b;border-radius: 4px;padding: 1px 8px; width:fit-content; display: flex; align-items: baseline;">
-                                    <input type="number"
-                                        style="background-color: transparent; border-color: transparent; border-width: 0px; width:42px;outline-width: 0px; font-size: 20px;"
-                                        id="pixelFormatApp1" placeholder="950" value="950">
-                                    <span
-                                        style="margin-left: -5px;color:#B6BAC0;font-size: 16px;cursor:default;">px</span>
-                                </div>
-                                <span>x</span>
-                                <div
-                                    style="background-color: #121d2b;border-radius: 4px;padding: 1px 8px; width:fit-content; display: flex; align-items: baseline;">
-                                    <input type="number"
-                                        style="background-color: transparent; border-color: transparent; border-width: 0px; width:42px;outline-width: 0px; font-size: 20px;"
-                                        id="pixelFormatApp2" placeholder="600" value="600">
-                                    <span
-                                        style="margin-left: -5px;color:#B6BAC0;font-size: 16px;cursor:default;">px</span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <button type="submit" class="sdq">Resetar dados salvos do Aplicativo</button> -->
-                    </div>
-                    <div id="abv2">
-                        <h1 style="margin-bottom: 10px;">Configurações da Rich Presence:</h1>
-                        <div class="ce4vtr-f34">
-                            <div style="display: flex;flex-direction:column;gap:6px;">
-                                <h1>Iniciar atividade junto com o aplicativo</h1>
-                                <span>Assim que o aplicativo iniciar a Rich Presence irá logo em seguida iniciar junto,
-                                    assim poupando tempo.</span>
-                            </div>
-                            <div>
-                                <label class="switch2 mt-[8px]">
-                                    <input type="checkbox" id="AppStartRich">
-                                    <div class="slider2 round2"></div>
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" class="sdq2" id="openConfigRich">Abrir configuração da atividade</button>
-                        <!--<button type="submit" class="sdq">Resetar dados salvos da Rich Presence</button>-->
-                    </div>
-                </div>
-                <div>
-                    <button
-                        style="border:0px; background-color: transparent;font-size: 16px;font-weight: 900; cursor: pointer;margin-top: 10px;margin-right: 10px;margin-left: 10px;"
-                        id="closeConfigApp"><i class="fa-solid fa-xmark-large" style="color: red;"></i></button>
-                </div>
-            </div>
-        </div>
-        <div class=""
-            style="
-    position: fixed;
-    bottom: -8px;
-    left: -8px;
-    display: flex;
-    align-items: center;
-    color: white;
-    padding: 15px 18px;
-    gap: 15px;
-    font-family: Arial, sans-serif;
-    max-width: 300px;
-">
+        </nav>
+        <div
+            style="position: fixed;bottom: -8px;left: -8px;display: flex;align-items: center;color: white;padding: 15px 18px;gap: 15px;font-family: Arial, sans-serif;max-width: 300px;">
             <span id="versionAPP">v0.0.0</span>
         </div>
-        <div id="donate-widget" style="
-    position: fixed;
-    bottom: 20px;
-    right: 25px;
-    display: flex;
-    align-items: center;
-    background: #121d2b;
-    color: white;
-    padding: 15px 18px;
-    border-radius: 12px;
-    gap: 15px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-    font-family: Arial, sans-serif;
-    max-width: 300px;
-">
+        <div id="donate-widget"
+            style="position: fixed;bottom: 20px;right: 25px;display: flex;align-items: center;background: #121d2b;color: white;padding: 15px 18px;border-radius: 12px;gap: 15px;box-shadow: 0 6px 12px rgba(0,0,0,0.4);font-family: Arial, sans-serif;max-width: 300px; z-index: 10;">
 
             <div style="display: flex; flex-direction: column; gap: 4px;">
-                <span style="font-size: 15px; font-weight: 600; color: #f5f5f5;">
+                <span style="font-size: 15px; font-weight: 600; color: #f5f5f5;" id="appTitleDonate">
                     💖 Apoie o Projeto
                 </span>
-                <span style="font-size: 13px; color: #cfcfcf; line-height: 1.3;">
+                <span style="font-size: 13px; color: #cfcfcf; line-height: 1.3;" id="appDescriptionDonate">
                     Ajude a manter o projeto ativo e continuar desenvolvendo coisas incríveis!
                 </span>
             </div>
 
-            <button id="openPix">
+            <button id="openPix" style="-webkit-app-region: no-drag;">
                 <i class="fa-solid fa-qrcode"></i> Doar
             </button>
         </div>
-        <div class="wedfr3" style="justify-content: flex-end">
-            <button id="configAppButton"
-                style="background-color: transparent; border: 0px; pointer-events: all; cursor: pointer; padding: 6px 5px;"
-                title="Configurações do Aplicativo"><i class="fa-solid fa-gear" style="color: #707070"></i></button>
-        </div>
-        <div style="display: flex; width: 100%; height: 100hv; align-items: center; position: fixed;" id="ndasc"></div>
-        <nav class="navbar">
-            <div style="display: flex; align-items: center;">
-                <img src="./image/imageicon.png" style="width: 25px;height: 25px;margin-left: 10px;" alt="logo">
-                <h1 class="title">Discord Rich Presence RedeWorth</h1>
-            </div>
-            <div class="v4tc">
-                <span title="Baixar nova versão." class="f43fd" id="f43fd" style="display: none;margin-top: 6px;"><i
-                        class="fa-solid fa-arrow-down-to-line" style="color: #49bb52"></i></span>
-                <div class="window-controls">
-                    <button id="minimize-btn" title="Minimizar Janela">🗕</button>
-                    <button id="maximize-btn" title="Maximizar Janela">🗖</button>
-                    <button id="close-btn" title="Fechar Janela">🗙</button>
-                </div>
-            </div>
-        </nav>
-        <div class="container">
-            <div style="margin-top: 100px;"></div>
-            <div class="a34rewfd">
-                <div class="de4-f5g3">
-                    <div class="ds23">
-                        <span class="a432d">Tempo Online no Minecraft</span>
-                    </div>
-                    <span class="fer546hy" id="dateOnMinecraft">Não foi aberto ainda...</span>
-                </div>
-                <div class="de4-f5g3">
-                    <div class="ds23">
-                        <span class="a432d">Atividade está ativa há</span>
-                    </div>
-                    <span class="fer546hy" id="dateOnActivities">Ainda não foi iniciado...</span>
-                </div>
-                <div class="de4-f5g3">
-                    <div class="ds23">
-                        <span class="a432d">Usando</span>
-                    </div>
-                    <span class="fer546hy" id="MemoryRamUsed">Sem consumo</span>
-                </div>
-                <div class="de4-f5g3">
-                    <div class="ds23">
-                        <span class="a432d">Tempo Restante Para Atualizar</span>
-                    </div>
-                    <span class="fer546hy" id="dateReloadStatus">Nenhum.</span>
-                </div>
-            </div>
-            <div class="sf34">
-                <div class="sr43">
-                    <div class="rfdwe">
-                        <div class="ded45t">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                width="150" height="90" viewBox="150" fill="none">
-                                <rect width="150" height="90" fill="url(#pattern0_7_148)"></rect>
-                                <defs xmlns="http://www.w3.org/2000/svg">
-                                    <pattern id="pattern0_7_148" patternContentUnits="objectBoundingBox" width="1"
-                                        height="1">
-                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image0_7_148"
-                                            transform="matrix(0.000704762 0 0 0.00104965 -0.0145071 -0.244681)"></use>
-                                    </pattern>
-                                    <image id="image0_7_148" width="1420" height="953"
-                                        xlink:href="./image/redeworth.png"></image>
-                                </defs>
-                            </svg>
+        <div id="content">
+            <div class="flex justify-center w-full h-full mt-7" style="-webkit-app-region: drag;">
+                <div class="flex w-[93%] h-[83vh] bg-[#070F1D] rounded-xl gap-2" style="-webkit-app-region: no-drag;">
+                    <div class="flex flex-col h-full bg-[#091327] rounded-l-xl justify-between">
+                        <div>
+                            <div class="cursor-pointer p-[20px] text-2xl bg-[#070F1D] rounded-l-lg hover:bg-[#0b1626] transition hover:text-[#071021] flex items-center gap-3"
+                                id="homeC" title-app="Inicio">
+                                <i class="fa-regular fa-house text-[#C3C3C3] group-hover:text-white transition"></i>
+                            </div>
+                            <div class="cursor-pointer p-[20px] text-2xl rounded-l-lg hover:bg-[#0b1626] transition hover:text-[#071021] flex items-center gap-3 group"
+                                id="configC" title-app="Configurações">
+                                <i class="fa-solid fa-gear text-[#C3C3C3] group-hover:text-white transition"></i>
+                            </div>
+                            <div class="cursor-pointer p-[20px] text-2xl rounded-l-lg hover:bg-[#0b1626] transition hover:text-[#071021] flex items-center gap-3 group"
+                                id="topC" title-app="Estatísticas">
+                                <i
+                                    class="fa-solid fa-arrow-trend-up text-[#C3C3C3] group-hover:text-white transition"></i>
+                            </div>
                         </div>
-                        <div class="fr3">
-                            <span id="statusServer">🔴 Status: Offline</span>
-                            <span id="playersServer">Jogadores Online: 0</span>
-                            <span>IP: redeworth.com</span>
+                        <div>
+                            <div class="cursor-pointer p-[20px] text-3xl rounded-l-lg hover:bg-[#0b1626] transition hover:text-[#071021] flex items-center gap-3 group"
+                                id="userC" title-app="Usuário">
+                                <i
+                                    class="fa-duotone fa-solid fa-circle-user text-[#C3C3C3] group-hover:text-white transition"></i>
+                            </div>
                         </div>
                     </div>
-                    <div class="erf">
-                        <button id="startRPC" title="Iniciar"><i class="fa-solid fa-play"
-                                style="color: #70bb33"></i></button>
-                        <button id="reloadRPC" title="Reiniciar" disabled><i class="fa-solid fa-rotate-right"
-                                style="color: #9b9b9b"></i></button>
-                        <button id="stopRPC" title="Parar" disabled><i class="fa-solid fa-stop"
-                                style="color: #bb3333"></i></button>
-                        <button id="configButton" title="Configurações"><i class="fa-solid fa-gear"
-                                style="color: #707070"></i></button>
-                    </div>
-                </div>
-                <div class="t4gre">
-                    <div class="ef4fd3">
-                        <span style="display:flex; gap:5px; align-items: center; color: #5c7797"><i
-                                class="fa-solid fa-rectangle-terminal" style="color: #2c4766;"></i> Terminal</span>
-                    </div>
-                    <div style="padding: 10px">
-                        <pre id="terminal"></pre>
-                    </div>
-                </div>
+                    <div class="flex-1 h-[83vh] flex flex-col overflow-hidden">
+                        <div id="homeSection" class="h-full overflow-y-auto p-4 flex gap-4 w-full">
+                            <div class="gap-4 flex flex-col">
+                                <div
+                                    class="flex gap-3 rounded-lg p-3 bg-[#060D19] w-[350px] items-center justify-center">
+                                    <button
+                                        class="flex items-center gap-2 px-3 py-1 rounded-full border-2 border-green-600 text-green-500 hover:bg-green-600/20 transition disabled:opacity-50"
+                                        id="startRPC" title-app="Iniciar Atividade">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current"
+                                            viewBox="0 0 24 24">
+                                            <path d="M8 5v14l11-7z" />
+                                        </svg>
+                                        <span>Iniciar</span>
+                                    </button>
+                                    <button
+                                        class="flex items-center gap-2 px-3 py-1 rounded-full border-2 border-yellow-500 text-yellow-400 hover:bg-yellow-500/20 transition disabled:opacity-50"
+                                        id="restartRPC" title-app="Reiniciar Atividade">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current"
+                                            viewBox="0 0 24 24">
+                                            <path
+                                                d="M12 5V1L7 6l5 5V7c2.8 0 5 2.2 5 5s-2.2 5-5 5-5-2.2-5-5H5c0 3.9 3.1 7 7 7s7-3.1 7-7-3.1-7-7-7z" />
+                                        </svg>
+                                        <span>Reiniciar</span>
+                                    </button>
+                                    <button
+                                        class="flex items-center gap-2 px-3 py-1 rounded-full border-2 border-red-600 text-red-500 hover:bg-red-600/20 transition disabled:opacity-50"
+                                        id="stopRPC" title-app="Parar Atividade">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current"
+                                            viewBox="0 0 24 24">
+                                            <path d="M6 6h12v12H6z" />
+                                        </svg>
+                                        <span>Parar</span>
+                                    </button>
+                                </div>
+                                <div class="flex gap-3 rounded-lg p-3 bg-[#060D19] w-[350px]">
+                                    <div
+                                        class="flex justify-center items-center w-[50px] h-[50px] bg-[#A4BA28]/10 text-[36px] rounded-lg">
+                                        <i class="fa-regular fa-grid-2 text-[#97A256]"></i>
+                                    </div>
+                                    <div class="flex flex-col justify-center">
+                                        <h2 class="text-base font-normal text-[#fafafa]/40" id="titleMineAd3">Tempo do
+                                            Minecraft Aberto:
+                                        </h2>
+                                        <h1 class="text-xl font-semibold" id="timeMinecraftIsON">0s</h1>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 rounded-lg p-3 bg-[#060D19] w-[350px]">
+                                    <div
+                                        class="flex justify-center items-center w-[50px] h-[50px] bg-[#28BABA]/10 text-[36px] rounded-lg">
+                                        <i class="fa-regular fa-layer-group text-[#024E70]"></i>
+                                    </div>
+                                    <div class="flex flex-col justify-center">
+                                        <h2 class="text-base font-normal text-[#fafafa]/40" id="titleATAd3">Atividade
+                                            está ativa há:
+                                        </h2>
+                                        <h1 class="text-xl font-semibold" id="timeProcessIsON">0s</h1>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 rounded-lg p-3 bg-[#060D19] w-[350px]">
+                                    <div
+                                        class="flex justify-center items-center w-[50px] h-[50px] bg-[#60BA28]/10 text-[36px] rounded-lg">
+                                        <i class="fa-regular fa-server text-[#2E7958]"></i>
+                                    </div>
+                                    <div class="flex flex-col justify-center">
+                                        <h2 class="text-base font-normal text-[#fafafa]/40" id="titleMemoAd3">Memoria
+                                            RAM Usada:</h2>
+                                        <h1 class="text-xl font-semibold" id="ramUsedProcess">0.00MiB</h1>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 rounded-lg p-3 bg-[#060D19] w-[350px]">
+                                    <div
+                                        class="flex justify-center items-center w-[50px] h-[50px] bg-[#AE28BA]/10 text-[36px] rounded-lg">
+                                        <i class="fa-brands fa-slack text-[#46227D]"></i>
+                                    </div>
+                                    <div class="flex flex-col justify-center">
+                                        <h2 class="text-base font-normal text-[#fafafa]/40" id="titleAtAAd3">Atualizando
+                                            Atividade em:
+                                        </h2>
+                                        <h1 class="text-xl font-semibold" id="timeResetProcessRPC">0s</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col w-full h-full rounded-lg bg-[#060D19]">
+                                <div class="bg-[#071227] rounded-t-lg w-full h-[25px] p-[6px] flex items-center">
+                                    <span style="display:flex; gap:5px; align-items: center; color: #5c7797"><i
+                                            class="fa-solid fa-rectangle-terminal" style="color: #2c4766;"></i>
+                                        Terminal</span>
+                                </div>
+                                <div>
+                                    <pre id="terminal"></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="configSection" class="hidden">
+                            <div class="flex gap-2 w-full">
+                                <div
+                                    class="flex flex-col p-2 w-[200px] h-[83vh] border-r-[1px] border-r-[#1a222d] flex-shrink-0">
+                                    <h1 class="text-[13px] font-semibold mb-1 text-[#fafafa] text-opacity-80">
+                                        Configurações do Aplicativo</h1>
+                                    <div class="cursor-pointer p-1 pr-2 pl-2 bg-[#122c43] rounded-[5px] text-[14px] hover:bg-opacity-80 mb-1 transition-all flex gap-1"
+                                        id="configCJ">Janela</div>
+                                    <div class="cursor-pointer p-1 pr-2 pl-2 bg-[#122c43] bg-opacity-40 hover:bg-opacity-80 rounded-[5px] text-[14px] transition-all"
+                                        id="configCP">Preferências</div>
+                                    <hr class="border-[#2d343b85] border-opacity-40 mt-2">
+                                    <h1 class="text-[13px] font-semibold mb-1 mt-2 text-[#fafafa] text-opacity-80">
+                                        Configurações de Atividade</h1>
+                                    <div class="cursor-pointer p-1 pr-2 pl-2 bg-[#122c43] bg-opacity-40 hover:bg-opacity-80 mb-1 rounded-[5px] text-[14px] transition-all"
+                                        id="configCA">Perfil</div>
+                                    <div class="cursor-pointer p-1 pr-2 pl-2 bg-[#122c43] bg-opacity-40 hover:bg-opacity-80 rounded-[5px] text-[14px] transition-all"
+                                        id="configCAPP">Preferências</div>
+                                </div>
+                                <div class="h-[83vh] overflow-y-auto">
+                                    <div class="mr-3 mt-3 mb-3 ml-1 gap-2 flex flex-col" id="viewConfigCJ">
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Minimizar para a bandeija</h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Clicar
+                                                    no X fará o Aplicativo ficar escondidinho e confortável na sua barra
+                                                    de tarefas quando você fechar o app.</span>
+                                            </div>
+                                            <div>
+                                                <label class="switch2 mt-[8px]">
+                                                    <input type="checkbox" id="minimizeToTray" checked>
+                                                    <div class="slider2 round2"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Iniciar aplicativo minimizado na
+                                                    bandeija</h1>
+                                                <span class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Ao
+                                                    iniciar o aplicativo, ele não aparecerá em sua tela, mas sim
+                                                    minimizado no modo
+                                                    bandeija do windows.</span>
+                                            </div>
+                                            <div>
+                                                <label class="switch2 mt-[8px]">
+                                                    <input type="checkbox" id="runAppToMin">
+                                                    <div class="slider2 round2"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mr-3 mt-3 mb-3 ml-1 gap-2 flex flex-col hidden" id="viewConfigCA">
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-4">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Nickname no Minecraft</h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Defina
+                                                    seu Nickname que irá aparecer na atividade.</span>
+                                            </div>
+                                            <div>
+                                                <div style="display: flex; align-items: center;" class="gap-1">
+                                                    <img id="headNickname"
+                                                        src="https://mc-heads.net/avatar/usrergf/16x16" alt="Head">
+                                                    <input class="fer3 " type="text" id="editNick">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mr-3 mt-3 mb-3 ml-1 gap-2 flex flex-col hidden" id="viewConfigCAPP">
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Iniciar atividade junto com o aplicativo
+                                                </h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Assim
+                                                    que o aplicativo iniciar a Rich Presence irá logo em seguida iniciar
+                                                    junto, assim poupando tempo.</span>
+                                            </div>
+                                            <div>
+                                                <label class="switch2 mt-[8px]">
+                                                    <input type="checkbox" id="AppStartRich">
+                                                    <div class="slider2 round2"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Mostrar Client de Minecraft</h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Caso
+                                                    ativado irá mostrar o Client de Minecraft aberto na Rich Presence.
+                                                    Não funciona com todos apenas com: Lunar Client, Badlion, LabyMod,
+                                                    Sklauncher e TLauncher.</span>
+                                            </div>
+                                            <div>
+                                                <label class="switch2 mt-[8px]">
+                                                    <input type="checkbox" id="showClient" checked>
+                                                    <div class="slider2 round2"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Mostrar Jogadores</h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Caso
+                                                    ativado irá mostrar o total de jogadores na Rede Worth.</span>
+                                            </div>
+                                            <div>
+                                                <label class="switch2 mt-[8px]">
+                                                    <input type="checkbox" id="showPlayers" checked>
+                                                    <div class="slider2 round2"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Mostrar tempo da atividade</h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Caso
+                                                    ativado irá mostrar o tempo total da atividade ligada ou irá mostrar
+                                                    o tempo alterado.</span>
+                                            </div>
+                                            <div>
+                                                <label class="switch2 mt-[8px]">
+                                                    <input type="checkbox" id="showTimeActivities" checked>
+                                                    <div class="slider2 round2"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Alterar tempo da Atividade</h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Altere
+                                                    o tempo da atividade(ligada), isso irá aparecer na atividade caso a
+                                                    opção a cima esteja ativada.</span>
+                                            </div>
+                                            <div>
+                                                <input
+                                                    class="fer3 input-dark-calendar shadow-inner text-white bg-gray-800 border-gray-700 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                    type="datetime-local" id="editTimeActivitiesProfile">
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Mostrar tempo verdadeiro da atividade
+                                                </h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Caso
+                                                    ativado irá mostrar o tempo total da atividade ligada real.</span>
+                                            </div>
+                                            <div>
+                                                <label class="switch2 mt-[8px]">
+                                                    <input type="checkbox" id="showActivitiesReal" checked>
+                                                    <div class="slider2 round2"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mr-3 mt-3 mb-3 ml-1 gap-2 flex flex-col hidden" id="viewConfigCP">
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Fechar aplicativo junto com o jogo</h1>
+                                                <span class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Ao
+                                                    fechar o jogo, o aplicativo irá fechar junto ao jogo, sendo mais
+                                                    prático de
+                                                    encerrar a atividade, quando não em uso.</span>
+                                            </div>
+                                            <div>
+                                                <label class="switch2 mt-[8px]">
+                                                    <input type="checkbox" id="closeAppGameInt">
+                                                    <div class="slider2 round2"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="p-3 rounded-[10px] flex justify-between items-center bg-[#101c2ba3] gap-2">
+                                            <div>
+                                                <h1 class="font-bold mb-[-5px]">Tamanho da janela</h1>
+                                                <span
+                                                    class="font-regular text-[#fafafa] text-opacity-70 text-[14px]">Alterar
+                                                    tamanho da janela quando o aplicativo iniciar.
+                                                    <span style="color: #989898;">(padrão 950px por 600px)</span>
+                                                </span>
+                                            </div>
+                                            <div style="display: flex; gap:10px;align-items: center;">
+                                                <div
+                                                    style="background-color: #121d2b;border-radius: 4px;padding: 1px 8px; width:fit-content; display: flex; align-items: baseline;">
+                                                    <input type="number"
+                                                        style="background-color: transparent; border-color: transparent; border-width: 0px; width:42px;outline-width: 0px; font-size: 18px;"
+                                                        id="pixelFormatApp1" placeholder="950" value="950">
+                                                    <span
+                                                        style="margin-left: -5px;color:#B6BAC0;font-size: 14px;cursor:default;">px</span>
+                                                </div>
+                                                <span>x</span>
+                                                <div
+                                                    style="background-color: #121d2b;border-radius: 4px;padding: 1px 8px; width:fit-content; display: flex; align-items: baseline;">
+                                                    <input type="number"
+                                                        style="background-color: transparent; border-color: transparent; border-width: 0px; width:42px;outline-width: 0px; font-size: 18px;"
+                                                        id="pixelFormatApp2" placeholder="600" value="600">
+                                                    <span
+                                                        style="margin-left: -5px;color:#B6BAC0;font-size: 14px;cursor:default;">px</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="topSection" class="h-full overflow-y-auto hidden">
+                            <div class="flex gap-2 w-full p-6 pt-4 flex-col mt-[12px]" id="statistics-top-views">
+                                <div class="grid grid-cols-[auto_1fr] gap-x-6 mt-[-12px]">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-3 h-3 bg-gray-500 rounded-full mt-1"></div>
+                                        <div class="w-px h-full bg-gray-700"></div>
+                                    </div>
+                                    <div class="overflow-hidden mb-[20px]">
+                                        <h2 class="text-lg font-semibold text-white mb-4">Novembro de 2025</h2>
+                                        <div class="flex flex-wrap gap-x-8 gap-y-4 mb-6">
+                                            <div>
+                                                <span class="text-sm text-gray-400">Tempo do Minecraft Aberto:</span>
+                                                <p class="text-xl font-bold text-white">1d 20m 2s</p>
+                                            </div>
+                                            <div>
+                                                <span class="text-sm text-gray-400">Tempo da Atividade Ativa:</span>
+                                                <p class="text-xl font-bold text-white">1d 20m 2s</p>
+                                            </div>
+                                            <div>
+                                                <span class="text-sm text-gray-400">Aplicativo Aberto:</span>
+                                                <p class="text-xl font-bold text-white">20 <span
+                                                        class="text-base font-normal text-gray-300">vezes</span></p>
+                                            </div>
+                                            <div>
+                                                <span class="text-sm text-gray-400">Tempo do Aplicativo Aberto:</span>
+                                                <p class="text-xl font-bold text-white">2d 20m 12s</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex overflow-x-auto gap-4 pb-4 w-full">
+                                            <div
+                                                class="flex-shrink-0 w-[12em] bg-gray-800 p-4 rounded-lg border border-gray-700">
+                                                <span class="text-sm text-gray-400 mb-2 block">Quarta-feira, 20 de
+                                                    Novembro de 2025</span>
+                                                <div class="flex flex-wrap gap-6">
+                                                    <div>
+                                                        <span class="text-xs text-gray-400">Tempo do Minecraft
+                                                            Aberto:</span>
+                                                        <p class="text-lg font-medium text-white">1d 20m 2s</p>
+                                                    </div>
+                                                    <div>
+                                                        <span class="text-xs text-gray-400">Tempo da Atividade
+                                                            Ativa:</span>
+                                                        <p class="text-lg font-medium text-white">1d 20m 2s</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="userSection" class="h-full overflow-y-auto hidden">
+                            <div class="flex flex-col w-full h-full p-6 pt-4 gap-4">
+                                <div class="flex flex-col items-center justify-center h-full gap-4" id="noLoginUser">
+                                    <div
+                                        class="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center text-5xl text-gray-400">
+                                        <i class="fa-regular fa-circle-user"></i>
+                                    </div>
+                                    <h2 class="text-2xl font-semibold text-white">Você não está logado</h2>
+                                    <p class="text-center text-gray-400 max-w-xs">Para acessar as funcionalidades de
+                                        usuário, faça login na sua conta.</p>
+                                    <button
+                                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition"
+                                        id="loginButton">Fazer Login</button>
+                                </div>
+                                <div class="hidden flex-col w-full h-full gap-4 p-4" id="yesLoginUser">
+                                    <div class="flex flex-col items-center justify-center relative">
+                                        <div class="w-32 h-32 bg-gray-700 rounded-full flex items-center justify-center text-5xl text-gray-400 overflow-hidden border-[5px] border-[#0e2043]"
+                                            id="avatarUserProfile">
+                                        </div>
 
+                                        <h2 class="mt-3 text-2xl font-bold text-white" id="userName"></h2>
+                                        <p class="text-gray-400 text-sm" id="userTag">@vitorxp</p>
+
+                                        <div id="tags" class="flex gap-2 items-center justify-center"></div>
+
+                                        <div class="absolute bottom-0 right-10 w-5 h-5 bg-green-500 rounded-full border-4 border-[#0e2043]"
+                                            title="Online"></div>
+                                    </div>
+
+                                    <!-- <div class="flex flex-col gap-2 text-gray-400 text-sm mt-4">
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-medium text-gray-300">Nível:</span>
+                                            <span class="text-blue-400 font-semibold" id="userLevel">12</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-medium text-gray-300">Experiência:</span>
+                                            <span class="text-blue-400 font-semibold" id="userXP">3,450 XP</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="font-medium text-gray-300">Conta criada em:</span>
+                                            <span id="userCreatedAt">28/04/2020</span>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="flex justify-center gap-4 mt-6">
+                                        <button
+                                            class="px-4 py-2 bg-[#0e2043] text-white rounded-lg hover:bg-[#142c5f] transition cursor-no-drop"
+                                            disabled id="editProfileBtn">
+                                            Editar Perfil
+                                        </button>
+                                        <button
+                                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                                            id="logoutBtn">
+                                            Sair
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="custom-tooltip"
+                    class="hidden fixed z-50 px-3 py-1.5 bg-[#001b33] bg-opacity-80 text-white text-sm rounded-md shadow-lg pointer-events-none max-w-xs transition-all duration-150 ease-out"
+                    style="z-index: 999 !important;">
+                </div>
             </div>
-        </div>
-    </div>
-
-    <script src="renderer.js"></script>
 </body>
 
 </html>
