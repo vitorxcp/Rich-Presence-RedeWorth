@@ -1,0 +1,90 @@
+{
+  "trayMenu": [
+    {
+      "label": "Comprobar Actualizaciones"
+    },
+    {
+      "label": "Iniciar Actividad"
+    },
+    {
+      "label": "Reiniciar Actividad"
+    },
+    {
+      "label": "Detener Actividad"
+    },
+    {
+      "label1": "Ocultar Aplicación",
+      "label2": "Mostrar Aplicación"
+    },
+    {
+      "label": "Cerrar Aplicación"
+    }
+  ],
+  "contextMenu": [
+    {
+      "label": "Comprobar Actualizaciones"
+    },
+    {
+      "label": "Minimizar"
+    },
+    {
+      "label": "Maximizar"
+    },
+    {
+      "label": "Ocultar Aplicación"
+    },
+    {
+      "label": "Cerrar Aplicación"
+    }
+  ],
+  "splash": {
+    "title": "Cargando...",
+    "checkUpdates": "Buscando actualizaciones...",
+    "updatePending": "Encontramos una actualización pendiente, descargando...",
+    "updateSucess": "¡Actualización completada!",
+    "startApp": "Iniciando Aplicación...",
+    "down": "Descargando...",
+    "extracting": "Extrayendo, esto puede tardar un momento...",
+    "noUp": "¡No hay actualizaciones!"
+  },
+  "main": {
+    "appTitleDonate": "💖 Apoya el Proyecto",
+    "appDescriptionDonate": "¡Ayuda a mantener el proyecto activo y a seguir desarrollando cosas increíbles!",
+    "donateButton": "Donar",
+    "homeSection": {
+      "controls": {
+        "start": {
+          "content": "Iniciar",
+          "attr": "Iniciar Actividad"
+        },
+        "restart": {
+          "content": "Reiniciar",
+          "attr": "Reiniciar Actividad"
+        },
+        "stop": {
+          "content": "Detener",
+          "attr": "Detener Actividad"
+        }
+      },
+      "information": {
+        "titleMinecraft": "Tiempo de Minecraft Abierto:",
+        "titleAtivApp": "Actividad activa durante:",
+        "titleRam": "RAM Usada:",
+        "TitleAppAt": "Actualizando Actividad en:"
+      }
+    },
+    "navbar": {
+      "window-controls": {
+        "minimize-btn": "Minimizar Ventana",
+        "maximize-btn": "Maximizar Ventana",
+        "close-btn": "Cerrar Ventana"
+      }
+    },
+    "attr": {
+      "homeC": "Inicio",
+      "configC": "Configuración",
+      "topC": "Estadísticas",
+      "userC": "Usuario"
+    }
+  }
+}
