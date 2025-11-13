@@ -1296,6 +1296,7 @@
     margin: 0;
     color: #fafafa;
     font-family: 'League Spartan';
+    user-select: none;
 }
 
 nav.navbar h1.title {
@@ -1308,12 +1309,27 @@ nav.navbar h1.title {
     font-weight: 100;
 }
 
+.input-dark-calendar {
+    color-scheme: dark;
+}
+
+input[type="datetime-local"]::-webkit-inner-spin-button,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {}
+
+input[type="datetime-local"] {
+    -moz-appearance: textfield;
+}
+
 div.container {
     display: flex;
     padding: 16px;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+}
+
+#content {
+    -webkit-app-region: no-drag;
 }
 
 div.a34rewfd {
@@ -1504,11 +1520,9 @@ div.ed32 {
     margin-bottom: 10px;
     border-radius: 4px;
     width: 100%;
-
-    /* controle para as animações */
-    position: relative;       /* necessário para os filhos absolute */
-    min-height: 200px;        /* altura mínima pra não colapsar quando troca */
-    overflow: hidden;         /* evita bug visual durante a transição */
+    position: relative;
+    min-height: 200px;
+    overflow: hidden;
 }
 
 div.ed32 h1 {
@@ -1519,20 +1533,6 @@ div.ed32 h1 {
     font-size: 12px;
     cursor: pointer;
 }
-
-/* div.wedfr-d32 .adsf {
-    transition: 300ms;
-    animation: 300ms;
-    width: 320px;
-    border-radius: 8px;
-    margin: 310px 10px;
-}
-
-div.wedfr-d32 .adsf .cer4 {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-} */
 
 div.sf34 .sr43 .erf button:hover {
     scale: 1.1;
@@ -1560,22 +1560,23 @@ div.sf34 .sr43 .erf button[disabled] {
 }
 
 nav.navbar {
+    position: relative;
     z-index: 100;
-    position: fixed;
     background-color: #0B121F;
-    width: 100%;
-    height: 42px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     -webkit-app-region: drag;
-    /* Permite arrastar a janela */
     user-select: none;
-    /* Evita seleção de texto acidental */
 }
 
+body {
+    overflow: hidden;
+    -webkit-app-region: drag;
+}
+
+
 .custom-title-bar {
-    /* width: 100%; */
     height: 30px;
     background: #0b121f;
     color: white;
@@ -1620,14 +1621,41 @@ button.sdq {
     width: 100%;
 }
 
+#openPix {
+    background: #22a552;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: all 0.1s ease-in-out;
+}
+
+#openPix:hover {
+    background: #1c8d45;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#openPix:active {
+    background: #167a36;
+    transform: scale(0.97);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
 button.sdq:hover {
     background-color: #660d12;
-    
+
 }
 
 button.sdq:active {
     background-color: #5D050A;
-    
+
 }
 
 button.sdq2 {
@@ -1645,17 +1673,16 @@ button.sdq2 {
 
 button.sdq2:hover {
     background-color: #0e3972;
-    
+
 }
 
 button.sdq2:active {
     background-color: rgb(6, 46, 97);
-    
+
 }
 
 .window-controls {
     display: flex;
-    gap: 5px;
 }
 
 .window-controls button {
@@ -1664,10 +1691,19 @@ button.sdq2:active {
     color: white;
     cursor: pointer;
     font-size: 12px;
-    height: 42px;
+    height: 38px;
     width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     -webkit-app-region: no-drag;
-    /* Permite clique nos botões */
+    transition: background 0.1s;
+    animation-duration: 0.3s;
+}
+
+.window-controls button:active {
+    scale: 0.9;
+    opacity: 0.8;
 }
 
 .window-controls button:hover {
@@ -1753,7 +1789,7 @@ div.wedfr3 span#versionAPP {
 }
 
 span.f43fd {
-    font-size: 24px;
+    font-size: 16px;
     padding: 0px 15px;
     cursor: pointer;
 }
@@ -1844,25 +1880,28 @@ div.dew4 {
     margin-top: 25px
 }
 
-#abv1, #abv2 {
-  opacity: 0;
-  transform: translateX(20px);
-  transition: all 0.4s ease;
-  max-height: 0;
-  overflow: hidden;
-  position: absolute;
-  width: 100%;
-  pointer-events: none;
+#abv1,
+#abv2 {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.4s ease;
+    max-height: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    pointer-events: none;
 }
 
 /* quando ativo fica estável */
-#abv1.active, #abv2.active {
-  opacity: 1;
-  transform: translateX(0);
-  max-height: 2000px; /* valor alto o suficiente */
-  overflow: visible;
-  position: relative;
-  pointer-events: auto;
+#abv1.active,
+#abv2.active {
+    opacity: 1;
+    transform: translateX(0);
+    max-height: 2000px;
+    /* valor alto o suficiente */
+    overflow: visible;
+    position: relative;
+    pointer-events: auto;
 }
 
 div.fd4tr {
@@ -1895,13 +1934,29 @@ div.fd4tr {
 }
 
 #terminal {
+    font-size: 14px;
     padding: 5px;
     overflow-y: auto;
-    height: 240px;
+    height: 72vh;
     width: 100%;
     max-width: 100%;
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+button#startRPC:disabled {
+    cursor: no-drop;
+    opacity: 0.5;
+}
+
+button#restartRPC:disabled {
+    cursor: no-drop;
+    opacity: 0.5;
+}
+
+button#stopRPC:disabled {
+    cursor: no-drop;
+    opacity: 0.5;
 }
 
 div.wedfr-d3f4 div.fd4tr div div h1 {
@@ -2040,8 +2095,8 @@ input {
 .switch2 {
     display: inline-block;
     position: relative;
-    min-width: 50px;
-    min-height: 27px;
+    min-width: 45px;
+    min-height: 22px;
 }
 
 .switch2 input {
@@ -2049,7 +2104,7 @@ input {
 }
 
 .slider2 {
-    background-color: #060D1A;
+    background-color: #232938;
     bottom: 0;
     cursor: pointer;
     left: 0;
@@ -2064,14 +2119,14 @@ input {
     content: "";
     font-family: "Font Awesome 6 Pro";
     font-weight: 900;
-    bottom: 3px;
-    left: 3px;
+    bottom: 2px;
+    left: 2px;
     position: absolute;
     font-size: 12px;
     text-align-last: center;
     transition: .4s;
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     color: #1F232A;
     animation: check2 0.8s forwards;
 }
