@@ -15,6 +15,7 @@ if (!fs.existsSync(dataDir)) {
 
 const filePathRich = path.join(dataDir, "dataRich.json");
 const filePath = path.join(dataDir, "data.json");
+const filePStats = path.join(dataDir, "stats.json");
 
 class db {
     static carregarDados() {
@@ -167,6 +168,82 @@ class db {
                 }
                 return obj;
             }
+        }
+    }
+
+    static stats = class {
+        static carregarDados() {
+            if (!fs.existsSync(filePStats)) return {};
+            const dados = fs.readFileSync(filePStats, 'utf8');
+            return JSON.parse(dados);
+        }
+        static salvarDados(dados) {
+            fs.writeFileSync(filePStats, JSON.stringify(dados, null, 2), 'utf8');
+        }
+        static get(chave) {
+            let dados = this.carregarDados();
+            return chave.split('/').reduce((obj, key) => obj && obj.hasOwnProperty(key) ? obj[key] : null, dados);
+        }
+        static update(chave, valor) {
+            let dados = this.carregarDados();
+            let keys = chave.split('/');
+            let obj = dados;
+
+            for (let i = 0; i < keys.length - 1; i++) {
+                const key = keys[i];
+                const nextKey = keys[i + 1];
+
+                if (!isNaN(nextKey)) {
+                    if (!Array.isArray(obj[key])) obj[key] = [];
+                    obj = obj[key];
+                } else {
+                    obj[key] = obj[key] || {};
+                    obj = obj[key];
+                }
+            }
+
+            const ultimaChave = keys[keys.length - 1];
+            obj[ultimaChave] = valor;
+
+            this.salvarDados(dados);
+        }
+        static push(chave, valor) {
+            let dados = this.carregarDados();
+            let keys = chave.split('/');
+            let obj = dados;
+            for (let i = 0; i < keys.length - 1; i++) {
+                obj[keys[i]] = obj[keys[i]] || {};
+                obj = obj[keys[i]];
+            }
+            const ultimaChave = keys[keys.length - 1];
+            if (!Array.isArray(obj[ultimaChave])) {
+                obj[ultimaChave] = [];
+            }
+            obj[ultimaChave].push(valor);
+            this.salvarDados(dados);
+        }
+        static set(chave, valor) {
+            let dados = this.carregarDados();
+            let keys = chave.split('/');
+            let obj = dados;
+            if (keys.length === 1) {
+                dados[keys[0]] = valor;
+            } else {
+                let parent = keys.slice(0, -1).reduce((o, k) => o[k] = o[k] || {}, dados);
+                parent[keys[keys.length - 1]] = valor;
+            }
+            this.salvarDados(dados);
+            return obj;
+
+        }
+        static save(novosDados) {
+            let obj = {};
+            for (let chave in novosDados) {
+                if (novosDados.hasOwnProperty(chave)) {
+                    obj[chave] = this.discord.set(chave, novosDados[chave]);
+                }
+            }
+            return obj;
         }
     }
 }
