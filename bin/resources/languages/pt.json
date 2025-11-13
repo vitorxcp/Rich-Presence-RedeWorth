@@ -1,0 +1,90 @@
+{
+  "trayMenu": [
+    {
+      "label": "Verificar Atualizações"
+    },
+    {
+      "label": "Iniciar Atividade"
+    },
+    {
+      "label": "Reiniciar Atividade"
+    },
+    {
+      "label": "Parar Atividade"
+    },
+    {
+      "label1": "Ocultar Aplicação",
+      "label2": "Mostrar Aplicação"
+    },
+    {
+      "label": "Fechar Aplicação"
+    }
+  ],
+  "contextMenu": [
+    {
+      "label": "Verificar Atualizações"
+    },
+    {
+      "label": "Minimizar"
+    },
+    {
+      "label": "Maximizar"
+    },
+    {
+      "label": "Ocultar Aplicação"
+    },
+    {
+      "label": "Fechar Aplicação"
+    }
+  ],
+  "splash": {
+    "title": "A carregar...",
+    "checkUpdates": "A procurar atualizações...",
+    "updatePending": "Encontrámos uma atualização pendente, a transferir...",
+    "updateSucess": "Atualização bem-sucedida!",
+    "startApp": "A iniciar a Aplicação...",
+    "down": "A transferir...",
+    "extracting": "A extrair, isto pode demorar um pouco...",
+    "noUp": "Sem atualizações!"
+  },
+  "main": {
+    "appTitleDonate": "💖 Apoie o Projeto",
+    "appDescriptionDonate": "Ajude a manter o projeto ativo e a continuar a desenvolver coisas incríveis!",
+    "donateButton": "Apoiar",
+    "homeSection": {
+      "controls": {
+        "start": {
+          "content": "Iniciar",
+          "attr": "Iniciar Atividade"
+        },
+        "restart": {
+          "content": "Reiniciar",
+          "attr": "Reiniciar Atividade"
+        },
+        "stop": {
+          "content": "Parar",
+          "attr": "Parar Atividade"
+        }
+      },
+      "information": {
+        "titleMinecraft": "Tempo de Minecraft Aberto:",
+        "titleAtivApp": "Atividade ativa há:",
+        "titleRam": "RAM Utilizada:",
+        "TitleAppAt": "A atualizar Atividade em:"
+      }
+    },
+    "navbar": {
+      "window-controls": {
+        "minimize-btn": "Minimizar Janela",
+        "maximize-btn": "Maximizar Janela",
+        "close-btn": "Fechar Janela"
+      }
+    },
+    "attr": {
+      "homeC": "Início",
+      "configC": "Definições",
+      "topC": "Estatísticas",
+      "userC": "Utilizador"
+    }
+  }
+}
