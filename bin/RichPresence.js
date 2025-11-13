@@ -41,7 +41,6 @@ function centralizarTexto(texto, largura) {
 }
 
 async function exibirBanner() {
-  // console.clear();
   await verificarAtualizarVersao();
 
   const largura = 70;
@@ -52,7 +51,7 @@ async function exibirBanner() {
     const fs = require('fs');
     const path = require('path');
 
-    const pastaProjeto = path.join(__dirname, '..', "..");
+    const pastaProjeto = path.join(__dirname, '..', "..", "..");
     const stats = fs.statSync(pastaProjeto);
     const dataModificacao = new Date(stats.mtime);
 
@@ -100,7 +99,6 @@ async function iniciarRPC() {
 }
 
 process.stdin.on('data', (chunk) => {
-  console.log("", chunk);
   try {
     const jsonStrings = chunk.toString().trim().split("\n").filter(Boolean);
 
