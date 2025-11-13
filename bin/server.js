@@ -42,6 +42,57 @@ async function getUserData(access_token) {
     return await res.json();
 }
 
+async function fetchJsonWithMeta(url, token) {
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const text = await res.text();
+  let json;
+  try { json = text ? JSON.parse(text) : null; } catch(e) { json = text; }
+  return {
+    status: res.status,
+    ok: res.ok,
+    headers: {
+      'x-ratelimit-limit': res.headers.get('x-ratelimit-limit'),
+      'x-ratelimit-remaining': res.headers.get('x-ratelimit-remaining'),
+      'x-ratelimit-reset': res.headers.get('x-ratelimit-reset')
+    },
+    body: json
+  };
+}
+
+async function getAllDiscordUserData(access_token) {
+  if (!access_token) throw new Error('access_token é obrigatório');
+
+  const endpoints = {
+    user: 'https://discord.com/api/users/@me',
+    guilds: 'https://discord.com/api/users/@me/guilds',
+    connections: 'https://discord.com/api/users/@me/connections',
+    oauth2_me: 'https://discord.com/api/oauth2/@me'
+  };
+
+  const entries = Object.entries(endpoints);
+  const results = await Promise.all(entries.map(async ([key, url]) => {
+    try {
+      const r = await fetchJsonWithMeta(url, access_token);
+      return [key, { success: true, ...r }];
+    } catch (err) {
+      return [key, { success: false, error: String(err) }];
+    }
+  }));
+
+  const aggregated = Object.fromEntries(results);
+
+  const userBody = aggregated.user?.body;
+  if (userBody && userBody.id) {
+    aggregated.userAvatarUrl = userBody.avatar
+      ? `https://cdn.discordapp.com/avatars/${userBody.id}/${userBody.avatar}.png`
+      : null;
+  }
+
+  return aggregated;
+}
+
 const server = http.createServer(async (req, res) => {
     if (req.url.startsWith('/callback')) {
         const url = new URL(req.url, `http://localhost:${PORT}`);
@@ -49,7 +100,7 @@ const server = http.createServer(async (req, res) => {
 
         if (!code) {
             res.writeHead(400);
-            return res.end('Código de autorização não encontrado.');
+            return res.end(JSON.stringify({ message: "Código de autorização não encontrado." }));
         }
 
         try {
@@ -92,6 +143,44 @@ const server = http.createServer(async (req, res) => {
 
         try {
             const userData = await getUserData(code);
+            res.writeHead(200, {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            });
+            res.end(JSON.stringify(userData));
+        } catch (err) {
+            if (!res.headersSent) {
+                res.writeHead(500, {
+                    'Access-Control-Allow-Origin': '*'
+                });
+                res.end('Erro interno do servidor.');
+            }
+        }
+    } else if (req.url.startsWith('/api/userall')) {
+        const url = new URL(req.url, `http://localhost:${PORT}`);
+        const code = db.get("tokenUser");
+
+        if (!code) {
+            res.writeHead(400, {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            });
+            return res.end(JSON.stringify({ message: "Código de autorização não encontrado." }));
+        }
+
+        if (req.method === 'OPTIONS') {
+            res.writeHead(204, {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type'
+            });
+            return res.end();
+        }
+
+        try {
+            const userData = await getAllDiscordUserData(code);
             res.writeHead(200, {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
