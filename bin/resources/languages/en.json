@@ -1,0 +1,90 @@
+{
+  "trayMenu": [
+    {
+      "label": "Check for Updates"
+    },
+    {
+      "label": "Start Activity"
+    },
+    {
+      "label": "Restart Activity"
+    },
+    {
+      "label": "Stop Activity"
+    },
+    {
+      "label1": "Hide App",
+      "label2": "Show App"
+    },
+    {
+      "label": "Quit App"
+    }
+  ],
+  "contextMenu": [
+    {
+      "label": "Check for Updates"
+    },
+    {
+      "label": "Minimize"
+    },
+    {
+      "label": "Maximize"
+    },
+    {
+      "label": "Hide App"
+    },
+    {
+      "label": "Quit App"
+    }
+  ],
+  "splash": {
+    "title": "Loanding...",
+    "checkUpdates": "Searching for updates...",
+    "updatePending": "We found a pending update, downloading...",
+    "updateSucess": "Update successful!",
+    "startApp": "Starting Application...",
+    "down": "Downloading...",
+    "extracting": "Extracting, this might take a while...",
+    "noUp": "No updates!"
+  },
+  "main": {
+    "appTitleDonate": "💖 Support the Project",
+    "appDescriptionDonate": "Help keep the project active and continue developing amazing things!",
+    "donateButton": "Donate",
+    "homeSection": {
+        "controls": {
+            "start": {
+                "content": "Start",
+                "attr": "Start Activity"
+            },
+            "restart": {
+                "content": "Restart",
+                "attr": "Restart Activity"
+            },
+            "stop": {
+                "content": "Stop",
+                "attr": "Stop Activity"
+            }
+        },
+        "information": {
+            "titleMinecraft": "Minecraft Open Time:",
+            "titleAtivApp": "Activity has been active for:",
+            "titleRam": "Used RAM:",
+            "TitleAppAt": "Updating Activity on:"
+        }
+    },
+    "navbar": {
+        "window-controls":{
+            "minimize-btn": "Minimize Window",
+            "maximize-btn": "Maximize Window",
+            "close-btn": "Close Window"
+        }
+    },
+    "attr": {
+        "homeC": "Home",
+        "configC": "Settings",
+        "topC": "Statistics",
+        "userC": "User"
+    }
+  }
+}
